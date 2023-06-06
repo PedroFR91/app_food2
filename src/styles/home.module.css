@@ -1,3 +1,7 @@
 .container{
     background-color: wheat;
 }
+.form-label {
+    display: block;
+  }
+  

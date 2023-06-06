@@ -1,43 +1,60 @@
-import Link from 'next/link'
-import React from 'react'
-import Recetas from "./recetas";
+import React, { useState } from 'react'
 import styles from '../styles/home.module.css';
-
-const recetas = [
-    {
-      id: 1,
-      name: "Tacos de pollo",
-      ingredients: ["pollo", "cebolla", "tomate", "tortillas"],
-      instructions:
-        "1. Cocina el pollo en una sartén.\n2. Agrega la cebolla y el tomate.\n3. Sirve en las tortillas.",
-      image: "https://source.unsplash.com/500x500/?tacos",
-    },
-    {
-      id: 2,
-      name: "Ensalada de espinacas",
-      ingredients: ["espinacas", "manzanas", "nueces", "queso azul"],
-      instructions:
-        "1. Lava las espinacas y colócalas en un tazón.\n2. Agrega las manzanas, las nueces y el queso azul.\n3. Aliña con aceite de oliva y vinagre balsámico.",
-      image: "https://source.unsplash.com/500x500/?salad",
-    },
-  ];
-
+import { ServerStyleSheets } from '../../node_modules/@material-ui/core/styles';
+  
 const recipes = () => {
+    const [title, setTitle] = useState("");
+    const [ingredients, setIngredients] = useState("");
+    const [index, setIndex] = useState("");
+    const [url, setUrl] = useState("");
+  
+    const handleTitleChange = (event) => {
+        setTitle(event.target.value);
+    };
+  
+    const handleIngredientsChange = (event) => {
+        setIngredients(event.target.value);
+    };
+    const handleIndexChange = (event) => {
+        setIndex(event.target.value);
+    };
+    const handleUrlChange = (event) => {
+        setUrl(event.target.value);
+    };
+  
+    const handleSubmit = (event) => {
+      event.preventDefault();
+     
+    };
   return (
-    <div className={styles.container}>
-      <header style={{ display: 'flex', alignItems: 'center' }}>
-        <img src="https://github.com/andreamorgar/TFM_MII/blob/master/app/src/assets/img/appicon.png?raw=true" alt="Logo de la Aplicación" style={{ width: '150px', marginRight: '10px' }} />
-        <h1 style={{ flexGrow: 1 }}>Recipes FoodComp</h1>
-      </header>
-
-      <div>
-        {recetas.map((recetas) => (
-          <Recetas key={recetas.id} recetas={recetas} />
-        ))}
-      </div>
-      <p style={{ textAlign: "center" }}>Esta es una deliciosa receta de pasta con salsa de tomate, albahaca y queso parmesano.</p>
-
+    <form onSubmit={handleSubmit}>
+    <div>
+        <label>
+        Title:
+        <input type="title" value={title} onChange={handleTitleChange} required />
+        </label>
     </div>
+    <div>
+        <label>
+        Ingredients:
+        <input type="ingredients" value={ingredients} onChange={handleIngredientsChange} required />
+        </label>
+    </div>
+    <div>
+        <label>
+        Index:
+        <input type="ingredients" value={ingredients} onChange={handleIndexChange} required />
+        </label>
+    </div>
+    <div>
+        <label>
+        Url:
+        <input type="ingredients" value={ingredients} onChange={handleUrlChange} required />
+        </label>
+    </div>
+    <button type="submit">Save Recepy</button>
+  </form>
+
   )
 }
 

@@ -1,7 +1,10 @@
+import { initializeApp } from 'firebase/app';
 import firebase from 'firebase/app'
-import 'firebase/auth'
-import 'firebase/firestore'
+import { getAuth } from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore';
 
+
+//Web App firebase configuration
 const firebaseConfig = {
     apiKey: "AIzaSyBQ0LuFpaLczL0T4_YhkUiW_CyG60_DCQU",
     authDomain: "prueba-34903.firebaseapp.com",
@@ -12,11 +15,9 @@ const firebaseConfig = {
     appId: "1:635811935566:web:a55f0de47131dfcebeda1f"
   };
 
-if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig)
-}else {
-  firebase.app(); // if already initialized, use that one
-}
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+//const analytics = getAnalytics(app);
+export const db = getFirestore(app);
+export const auth = getAuth(app);
 
-export const auth = firebase.auth()
-export const db = firebase.firestore()
