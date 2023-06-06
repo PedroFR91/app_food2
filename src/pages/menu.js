@@ -3,6 +3,7 @@ import Head from 'next/head';
 import { makeStyles } from '../../node_modules/@material-ui/core/styles';
 import { Button, Grid } from '../../node_modules/@material-ui/core';
 
+
 const useStyles = makeStyles((theme) => ({
     
   button: {
@@ -38,6 +39,7 @@ const useStyles = makeStyles((theme) => ({
 const MenuPage = () => {
   const classes = useStyles();
 
+
   return (
     <div>
     <Head>
@@ -47,7 +49,9 @@ const MenuPage = () => {
 
     <Grid container>
       <Grid item xs={12} sm={4}>
-        <Button className={`${classes.button} ${classes.seafood}`}>
+        <Button
+              className={`${classes.button} ${classes.seafood}`}
+            >
           Seafood Recipes
         </Button>
       </Grid>

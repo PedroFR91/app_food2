@@ -5,6 +5,8 @@ import { AppBar, Toolbar, Typography, IconButton, Menu, MenuItem, TextField, But
 import { makeStyles } from '../../node_modules/@material-ui/core/styles';
 import Slide from './Slide';
 
+import { useRouter } from 'next/router';
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -35,6 +37,11 @@ export default function Home2() {
   const [anchorEl, setAnchorEl] = useState(null);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [completed, setCompleted] = useState(false);
+  const router = useRouter();
+
+  const handleButtonClick = (route) => {
+    router.push(route);
+  };
 
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -56,21 +63,21 @@ export default function Home2() {
     {
       title: 'Welcome!',
       description: 'In this app, you can find lots of recipes and customize to your preferences. You will be able to modify your recipes to take into account allergies, intolerances, specific diseases like diabetes or even diets such as vegetarian or vegan.',
-      buttonText: 'Siguiente',
+      buttonText: 'Next',
       onClick: handleNextSlide,
-      imageUrl: "/images/icon_def.png",
+      imageUrl: '../.../public/images/prawns-959219_1920.jpg',
     },
     {
       title: 'How to?',
       description: 'When you fancy cooking, explore the recipe gallery. Pick one and adapt the ingredients to your needs by applying food restrictions.',
-      buttonText: 'Siguiente',
+      buttonText: 'Next',
       onClick: handleNextSlide,
       imageUrl: 'url("/images/breakfast-1804457_1920.jpg")',
     },
     {
       title: 'Smart recipe adaptation',
       description: 'The app uses food intelligence to calculate the most suitable alternative for your diet',
-      buttonText: 'Completar',
+      buttonText: 'Complete',
       onClick: handleComplete,
       imageUrl: 'ruta/imagen-paso1.jpg',
     },
@@ -108,16 +115,24 @@ export default function Home2() {
 
       {/* Panel de búsqueda */}
       <Container className={classes.searchContainer}>
-      <TextField className={classes.searchInput}  placeholder="Buscar recetas" />
-        <Button variant="contained" color="primary">Buscar</Button>
+     
       </Container>
 
       {/* Contenido principal */}
       <Container>
         {completed ? (
           <Typography variant="h4" component="h2" className={classes.title}>
-            ¡Bienvenido a AppFoodCom!
-         
+            ¡Welcome to AppFoodCom! 
+            <TextField className={classes.searchInput}  placeholder="Search Recipes" />
+            <Button variant="contained" color="primary">Search</Button>
+            <Grid item xs={12} sm={4}>
+            <Button
+                className={`${classes.button} ${classes.breakfast}`}
+                onClick={() => handleButtonClick('/menu')}
+            >
+            Menus
+          </Button> 
+          </Grid>       
             </Typography>
         ) : (
           <Slide
@@ -128,6 +143,7 @@ export default function Home2() {
           />
         )}
       </Container>
+
 
       {/* Agregar aquí los enlaces a los archivos JS de Material-UI */}
     </div>
