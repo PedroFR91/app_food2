@@ -81,7 +81,7 @@ export const data= {
             "text": "cup"
         }
     ],
-    url: "http:\/\/tastykitchen.com\/recipes\/breakfastbrunch\/yogurt-parfaits\/",
+    url: "https://tastykitchen.com/recipes/wp-content/uploads/sites/2/2011/06/IMG_2692-630x420-410x615.jpg",
     weight_per_ingr: [
         226.796,
         152.0,

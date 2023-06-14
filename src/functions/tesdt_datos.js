@@ -96,8 +96,8 @@ export const data= {
                 saturates: "orange",
                 sugars: "orange"
             },
-            "id": "00051d5b9d",
-            "ingredients": [
+            id: "00051d5b9d",
+            ingredients: [
                 {
                     "text": "sugars, granulated"
                 },
@@ -282,8 +282,8 @@ export const data= {
                 saturates: "orange",
                 sugars: "green"
             },
-            "id": "00059b093b",
-            "ingredients": [
+            id: "00059b093b",
+            ingredients: [
                 {
                     "text": "chicken, broilers or fryers, wing, meat and skin, raw"
                 },
@@ -564,8 +564,8 @@ export const data= {
                 saturates: "orange",
                 sugars: "green"
             },
-            "id": "0005fc89f7",
-            "ingredients": [
+            id: "0005fc89f7",
+            ingredients: [
                 {
                     "text": "crustaceans, shrimp, raw (not previously frozen)"
                 },
@@ -765,8 +765,8 @@ export const data= {
                 saturates: "orange",
                 sugars: "red"
             },
-            "id": "0006ca31f4",
-            "ingredients": [
+            id: "0006ca31f4",
+            ingredients: [
                 {
                     "text": "cocoa, dry powder, unsweetened"
                 },
@@ -870,8 +870,8 @@ export const data= {
                 saturates: "green",
                 sugars: "green"
             },
-            "id": "00073a6b36",
-            "ingredients": [
+            id: "00073a6b36",
+            ingredients: [
                 {
                     "text": "cheese, pasteurized process, american, without added vitamin d"
                 },
@@ -984,8 +984,8 @@ export const data= {
                 saturates: "orange",
                 sugars: "red"
             },
-            "id": "0007c8edef",
-            "ingredients": [
+            id: "0007c8edef",
+            ingredients: [
                 {
                     "text": "spartan, real semi-sweet chocolate baking chips, upc: 011213162966"
                 },
@@ -1119,8 +1119,8 @@ export const data= {
                 saturates: "red",
                 sugars: "green"
             },
-            "id": "0007f5f800",
-            "ingredients": [
+            id: "0007f5f800",
+            ingredients: [
                 {
                     "text": "cornmeal, degermed, unenriched, yellow"
                 },
@@ -1338,8 +1338,8 @@ export const data= {
                 saturates: "green",
                 sugars: "red"
             },
-            "id": "0008c6e39a",
-            "ingredients": [
+            id: "0008c6e39a",
+            ingredients: [
                 {
                     "text": "sugars, powdered"
                 },
