@@ -1,13 +1,18 @@
 import React, { useState } from 'react';
 import Head from 'next/head';
 import { AppBar, Toolbar, Typography, IconButton, Menu, MenuItem, TextField, Button, Container, Grid, Card, CardMedia, CardContent } from '../../node_modules/@material-ui/core';
+import Box from '../../node_modules/@material-ui/core/Box';
+import MenuIcon from '../../node_modules/@material-ui/core/Menu';
+import Stepper from '../../node_modules/@material-ui/core/Stepper';
+import Step from '../../node_modules/@material-ui/core/Step';
+import StepLabel from '../../node_modules/@material-ui/core/StepLabel';
+import StepContent from '../../node_modules/@material-ui/core/StepContent';
+import Paper from '../../node_modules/@material-ui/core/Paper';
 
 import { makeStyles } from '../../node_modules/@material-ui/core/styles';
 import Slide from './Slide';
 
 import { useRouter } from 'next/router';
-
-
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -38,6 +43,19 @@ export default function Home2() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [completed, setCompleted] = useState(false);
   const router = useRouter();
+  const [activeStep, setActiveStep] = React.useState(0);
+
+  const handleNext = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  };
+
+  const handleBack = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
+
+  const handleReset = () => {
+    setActiveStep(0);
+  };
 
   const handleButtonClick = (route) => {
     router.push(route);
@@ -57,6 +75,7 @@ export default function Home2() {
 
   const handleComplete = () => {
     setCompleted(true);
+    router.push('/menu')
   };
 
   const slides = [
@@ -64,14 +83,14 @@ export default function Home2() {
       title: 'Welcome!',
       description: 'In this app, you can find lots of recipes and customize to your preferences. You will be able to modify your recipes to take into account allergies, intolerances, specific diseases like diabetes or even diets such as vegetarian or vegan.',
       buttonText: 'Next',
-      onClick: handleNextSlide,
-      imageUrl: '../.../public/images/prawns-959219_1920.jpg',
+      onClick: handleNext,
+      imageUrl: '/images/icon_def.png',
     },
     {
       title: 'How to?',
       description: 'When you fancy cooking, explore the recipe gallery. Pick one and adapt the ingredients to your needs by applying food restrictions.',
       buttonText: 'Next',
-      onClick: handleNextSlide,
+      onClick: handleNext,
       imageUrl: 'url("/images/breakfast-1804457_1920.jpg")',
     },
     {
@@ -85,22 +104,28 @@ export default function Home2() {
 
   return (
     <div>
-      <Head>
-        <title>AppFoodCom</title>
-        {/* Agregar aquí los enlaces a los archivos CSS de Material-UI */}
-      </Head>
+
 
       {/* Encabezado */}
-      <AppBar position="static" className={classes.appBar}>
-        <Toolbar>
-          <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu" onClick={handleMenuOpen}>
-           
-          </IconButton>
-          <Typography variant="h6" className={classes.title}>
-            AppFoodCom
-          </Typography>
-        </Toolbar>
-      </AppBar>
+      <Box sx={{ flexGrow: 1 }}>
+        <AppBar position="static">
+            <Toolbar>
+            <IconButton
+                size="large"
+                edge="start"
+                color="inherit"
+                aria-label="menu"
+                sx={{ mr: 2 }}
+            >
+                <MenuIcon />
+            </IconButton>
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                News
+            </Typography>
+            <Button color="inherit">Login</Button>
+            </Toolbar>
+        </AppBar>
+        </Box>
 
       {/* Menú */}
       <Menu
@@ -113,39 +138,53 @@ export default function Home2() {
         <MenuItem onClick={handleMenuClose}>Mis recetas personalizadas</MenuItem>
       </Menu>
 
-      {/* Panel de búsqueda */}
-      <Container className={classes.searchContainer}>
-     
-      </Container>
-
-      {/* Contenido principal */}
-      <Container>
-        {completed ? (
-          <Typography variant="h4" component="h2" className={classes.title}>
-            ¡Welcome to AppFoodCom! 
-            <TextField className={classes.searchInput}  placeholder="Search Recipes" />
-            <Button variant="contained" color="primary">Search</Button>
-            <Grid item xs={12} sm={4}>
-            <Button
-                className={`${classes.button} ${classes.breakfast}`}
-                onClick={() => handleButtonClick('/menu')}
+      <Box sx={{ maxWidth: 400 }}>
+      <Stepper activeStep={activeStep} orientation="vertical">
+        {slides.map((slide, index) => (
+          <Step key={slide.title}>
+            <StepLabel
+              optional={
+                index === 2 ? (
+                  <Typography variant="caption">Last step</Typography>
+                ) : null
+              }
             >
-            Menus
-          </Button> 
-          </Grid>       
-            </Typography>
-        ) : (
-          <Slide
-            title={slides[currentSlide].title}
-            description={slides[currentSlide].description}
-            buttonText={slides[currentSlide].buttonText}
-            onClick={slides[currentSlide].onClick}
-          />
+              {slide.title}
+            </StepLabel>
+            <StepContent>
+              <Typography>{slide.description}</Typography>
+              <Box sx={{ mb: 2 }}>
+                <div>
+                  <Button
+                    variant="contained"
+                    onClick={handleNext}
+                    sx={{ mt: 1, mr: 1 }}
+                  >
+                    {index === slides.length - 1 ? 'Finish' : 'Continue'}
+                  </Button>
+                  <Button
+                    disabled={index === 0}
+                    onClick={handleBack}
+                    sx={{ mt: 1, mr: 1 }}
+                  >
+                    Back
+                  </Button>
+                </div>
+              </Box>
+            </StepContent>
+          </Step>
+            ))}
+        </Stepper>
+        {activeStep === slides.length && (
+            <Paper square elevation={0} sx={{ p: 3 }}>
+            <Typography>All steps completed - you&apos;re finished</Typography>
+            <Button onClick={handleComplete} sx={{ mt: 1, mr: 1 }}>
+                Menu
+            </Button>
+            </Paper>
         )}
-      </Container>
+        </Box>
 
-
-      {/* Agregar aquí los enlaces a los archivos JS de Material-UI */}
     </div>
   );
 }

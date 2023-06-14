@@ -1,0 +1,24 @@
+import { db } from '../firebase.config';
+import {createDocument, getDocument, updateDocument, deleteDocument, listDocuments, collection, doc} from 'firebase/firestore'
+
+export async function createDocument(collection, doc) {
+  return db.collection(collection).add(doc);
+}
+
+export async function getDocument(collection, id) {
+  const doc = await db.collection(collection).doc(id).get();
+  return doc.exists ? doc.data() : null;
+}
+export async function updateDocument(collection, id, doc) {
+    return db.collection(collection).doc(id).set(doc, { merge: true });
+  }
+  
+  export async function deleteDocument(collection, id) {
+    return db.collection(collection).doc(id).delete();
+  }
+  
+  export async function listDocuments(collection) {
+    const snapshot = await db.collection(collection).get();
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  }
+  

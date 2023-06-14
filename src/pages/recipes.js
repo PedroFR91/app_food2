@@ -43,13 +43,13 @@ const recipes = () => {
     <div>
         <label>
         Index:
-        <input type="ingredients" value={ingredients} onChange={handleIndexChange} required />
+        <input type="index" value={ingredients} onChange={handleIndexChange} required />
         </label>
     </div>
     <div>
         <label>
         Url:
-        <input type="ingredients" value={ingredients} onChange={handleUrlChange} required />
+        <input type="url" value={ingredients} onChange={handleUrlChange} required />
         </label>
     </div>
     <button type="submit">Save Recepy</button>

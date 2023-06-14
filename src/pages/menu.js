@@ -3,6 +3,7 @@ import Head from 'next/head';
 import { makeStyles } from '../../node_modules/@material-ui/core/styles';
 import { Button, Grid } from '../../node_modules/@material-ui/core';
 
+import { useRouter } from 'next/router';
 
 const useStyles = makeStyles((theme) => ({
     
@@ -38,7 +39,11 @@ const useStyles = makeStyles((theme) => ({
 
 const MenuPage = () => {
   const classes = useStyles();
+  const router = useRouter();
 
+  const handleB1 = () => {
+    router.push('/CreateRecipe')
+  };
 
   return (
     <div>
@@ -49,7 +54,7 @@ const MenuPage = () => {
 
     <Grid container>
       <Grid item xs={12} sm={4}>
-        <Button
+        <Button onClick={handleB1}
               className={`${classes.button} ${classes.seafood}`}
             >
           Seafood Recipes

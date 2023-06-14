@@ -1,0 +1,104 @@
+.container {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+  
+    z-index: -10;
+  }
+  
+  .left,
+  .right {
+    width: 50%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .left {
+    background-color: rgba(191, 41, 4, 0.95);
+    color: rgb(6, 8, 6);
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
+    padding: 0 20px;
+  }
+  .left div {
+    display: flex;
+    flex-direction: column;
+    margin: 1rem;
+  }
+  .left div form {
+    display: flex;
+    flex-direction: column;
+    margin: 1rem;
+  }
+  .left div form div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin: 1rem;
+    font-size: 1rem;
+    border: 1px solid #ffffff;
+    padding: 0.5rem;
+    border-radius: 10px;
+  }
+  .left div form div:hover {
+    box-shadow: 1px 1px 1px 1px #ffffff;
+    color: #212121;
+    background-color: #ffffff;
+    cursor: pointer;
+  }
+  .left div form input,
+  .left div form button,
+  .toggleButton div {
+    margin: 0.5rem;
+    padding: 0.5rem;
+    border-radius: 5px;
+    border: none;
+    outline: none;
+    font-size: 1rem;
+  }
+  .left div form button {
+    background-color: transparent;
+    color: #ffffff;
+    border: 1px solid #ffffff;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .left div form button:hover {
+    background-color: #ffffff;
+    color: #212121;
+  }
+  .toggleButton {
+    position: relative;
+  }
+  
+  .toggleButton::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #f69d21;
+    transition: width 1.5s;
+  }
+  
+  .toggleButton:hover::before {
+    width: 100%;
+  }
+  
+  .right {
+    position: relative;
+    background-color: rgba(255, 255, 255, 0.6);
+  }
+  
+  .logo {
+    filter: drop-shadow(0 0 10px #00ffff);
+    animation: neonGlow 5s infinite;
+    animation-direction: alternate;
+  }
