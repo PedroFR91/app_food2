@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Head from 'next/head';
-import { AppBar, Toolbar, Typography, IconButton, Menu, MenuItem, TextField, Button, Container, Grid, Card, CardMedia, CardContent } from '../../node_modules/@material-ui/core';
+import {Typography, IconButton, Menu, MenuItem, TextField, Button, Container, Grid, Card, CardMedia, CardContent } from '../../node_modules/@material-ui/core';
 import Box from '../../node_modules/@material-ui/core/Box';
 import MenuIcon from '../../node_modules/@material-ui/core/Menu';
 import Stepper from '../../node_modules/@material-ui/core/Stepper';
@@ -8,6 +8,9 @@ import Step from '../../node_modules/@material-ui/core/Step';
 import StepLabel from '../../node_modules/@material-ui/core/StepLabel';
 import StepContent from '../../node_modules/@material-ui/core/StepContent';
 import Paper from '../../node_modules/@material-ui/core/Paper';
+
+import AppBar from '../../node_modules/@material-ui/core/AppBar';
+import Toolbar from '../../node_modules/@material-ui/core/Toolbar';
 
 import { makeStyles } from '../../node_modules/@material-ui/core/styles';
 import Slide from './Slide';
@@ -45,6 +48,8 @@ export default function Home2() {
   const router = useRouter();
   const [activeStep, setActiveStep] = React.useState(0);
 
+  const open = Boolean(anchorEl);
+
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
@@ -59,6 +64,9 @@ export default function Home2() {
 
   const handleButtonClick = (route) => {
     router.push(route);
+  };
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
   };
 
   const handleMenuOpen = (event) => {
@@ -104,11 +112,9 @@ export default function Home2() {
 
   return (
     <div>
-
-
       {/* Encabezado */}
       <Box sx={{ flexGrow: 1 }}>
-        <AppBar position="static">
+        <AppBar position="static" color="primary" >
             <Toolbar>
             <IconButton
                 size="large"
@@ -117,26 +123,13 @@ export default function Home2() {
                 aria-label="menu"
                 sx={{ mr: 2 }}
             >
-                <MenuIcon />
+               
             </IconButton>
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                News
-            </Typography>
-            <Button color="inherit">Login</Button>
+            
+            
             </Toolbar>
         </AppBar>
-        </Box>
-
-      {/* Menú */}
-      <Menu
-        anchorEl={anchorEl}
-        keepMounted
-        open={Boolean(anchorEl)}
-        onClose={handleMenuClose}
-      >
-        <MenuItem onClick={handleMenuClose}>Recetas</MenuItem>
-        <MenuItem onClick={handleMenuClose}>Mis recetas personalizadas</MenuItem>
-      </Menu>
+        </Box>    
 
       <Box sx={{ maxWidth: 400 }}>
       <Stepper activeStep={activeStep} orientation="vertical">

@@ -119,7 +119,7 @@ export default function SignInForm() {
             </Grid>
             <Grid item xs={12}>
               <Button type="submit" variant="contained" color="primary" fullWidth>
-                Log In
+                Create Account
               </Button>
             </Grid>
         </form>
@@ -164,7 +164,7 @@ export default function SignInForm() {
       <div>
         <div onClick={() => setToggleView(!toggleView)}>
           {toggleView
-            ? '¿Estás registrado?, accede'
+            ? 'Are you registered?, Log in'
             : '¿No tienes cuenta?, creala'}
         </div>
       </div>
