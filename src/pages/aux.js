@@ -267,10 +267,8 @@ import ArrowBackIcon from '../../node_modules/@mui/icons-material/ArrowBack';
                     />
                 </IconButton>
                 <Typography variant="h6" component="h2" sx={{ flexGrow: 1 }}>
-            {MyRecipes.title}
-          </Typography>
-                
-                
+                    {MyRecipes.title}
+                </Typography>
                 
                 </Toolbar>
             </AppBar>
