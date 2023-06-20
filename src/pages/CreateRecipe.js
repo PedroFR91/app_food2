@@ -5,7 +5,7 @@ import {Button} from '../../node_modules/@material-ui/core';
 import {data} from '../functions/1Recipe';
   
   const CreateRecipe = () => {
-     const [MyRecipes, setMyRecipes] = useState({})
+     const [MyRecipes, setMyRecipes] = useState([])
   //     index: 0,
   //     fsa_lights_per100g: {
   //         fat: "green",
@@ -104,6 +104,7 @@ import {data} from '../functions/1Recipe';
           data: data,
           timeStamp: serverTimestamp(),
         });
+        setMyRecipes(prevRecipes => [...prevRecipes, data]);
       
       } catch (error) {
         console.log(error);
@@ -131,7 +132,7 @@ import {data} from '../functions/1Recipe';
     }, []);
     console.log(MyRecipes)
   
-    const handleGet = async (e) => {
+  const handleGet = async (e) => {
       e.preventDefault();
       try {
   //creando documento llamado users y añadiendo un usuario
@@ -144,11 +145,12 @@ import {data} from '../functions/1Recipe';
     };
     return (
       <>
-      <Button onClick={handleAdd} >CreateRecipe</Button>
-      <Button onClick={handleGet} >GetRecipe</Button>
+      {MyRecipes.map((recipe,id) => (
+          <p key={id}>{recipe.title}</p>
+        ))}
       
-      <div>
-      <p>{MyRecipes.title}</p>
+      {/* <div>
+      <p>{MyRecipes[0].title?MyRecipes[0].title:''}</p>
           <h2>FSa Lights per 100g</h2>
           <ul>        
             { Object.entries(MyRecipes.fsa_lights_per100g).map(([key, value]) => (
@@ -213,9 +215,9 @@ import {data} from '../functions/1Recipe';
           <li key={index}>{weight}</li>
         ))} 
       </ul>
-      </div>
+      </div> */}
     
-      <img src={data.url}/>
+      {/* <img src={data.url}/> */}
     
     </>
         
