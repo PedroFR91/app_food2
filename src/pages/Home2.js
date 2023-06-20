@@ -1,16 +1,27 @@
 import React, { useState } from 'react';
-import Head from 'next/head';
-import {Typography, IconButton, Menu, MenuItem, TextField, Button, Container, Grid, Card, CardMedia, CardContent } from '../../node_modules/@material-ui/core';
-import Box from '../../node_modules/@material-ui/core/Box';
-import MenuIcon from '../../node_modules/@material-ui/core/Menu';
-import Stepper from '../../node_modules/@material-ui/core/Stepper';
-import Step from '../../node_modules/@material-ui/core/Step';
-import StepLabel from '../../node_modules/@material-ui/core/StepLabel';
-import StepContent from '../../node_modules/@material-ui/core/StepContent';
-import Paper from '../../node_modules/@material-ui/core/Paper';
+import { ThemeProvider } from '../../node_modules/@material-ui/core/styles';
+import theme from '../styles/theme';
 
-import AppBar from '../../node_modules/@material-ui/core/AppBar';
-import Toolbar from '../../node_modules/@material-ui/core/Toolbar';
+import Head from 'next/head';
+import {TextField, Container, Grid, Card, CardMedia, CardContent } from '../../node_modules/@material-ui/core';
+import AppBar from '../../node_modules/@mui/material/AppBar';
+import Box from '../../node_modules/@mui/material/Box';
+import Toolbar from '../../node_modules/@mui/material/Toolbar';
+import Typography from '../../node_modules/@mui/material/Typography';
+import Button from '../../node_modules/@mui/material/Button';
+import IconButton from '../../node_modules/@mui/material/IconButton';
+import MenuIcon from '../../node_modules/@mui/icons-material/Menu';
+
+import Menu from '../../node_modules/@mui/material/Menu';
+import MenuItem from '../../node_modules/@mui/material/MenuItem';
+
+
+import Stepper from '../../node_modules/@mui/material/Stepper';
+import Step from '../../node_modules/@mui/material/Step';
+import StepLabel from '../../node_modules/@mui/material/StepLabel';
+import StepContent from '../../node_modules/@mui/material/StepContent';
+import Paper from '../../node_modules/@mui/material/Paper';
+
 
 import { makeStyles } from '../../node_modules/@material-ui/core/styles';
 import Slide from './Slide';
@@ -92,29 +103,30 @@ export default function Home2() {
       description: 'In this app, you can find lots of recipes and customize to your preferences. You will be able to modify your recipes to take into account allergies, intolerances, specific diseases like diabetes or even diets such as vegetarian or vegan.',
       buttonText: 'Next',
       onClick: handleNext,
-      imageUrl: '/images/icon_def.png',
+      image: '/images/slides/logo_def.png',
     },
     {
       title: 'How to?',
       description: 'When you fancy cooking, explore the recipe gallery. Pick one and adapt the ingredients to your needs by applying food restrictions.',
       buttonText: 'Next',
       onClick: handleNext,
-      imageUrl: 'url("/images/breakfast-1804457_1920.jpg")',
+      image: 'images/slides/food_app1.png',
     },
     {
       title: 'Smart recipe adaptation',
       description: 'The app uses food intelligence to calculate the most suitable alternative for your diet',
       buttonText: 'Complete',
       onClick: handleComplete,
-      imageUrl: 'ruta/imagen-paso1.jpg',
+      image: 'images/slides/food_app2.png',
     },
   ];
 
   return (
+    <ThemeProvider theme={theme}>
     <div>
       {/* Encabezado */}
       <Box sx={{ flexGrow: 1 }}>
-        <AppBar position="static" color="primary" >
+        <AppBar position="static" color='primary'>
             <Toolbar>
             <IconButton
                 size="large"
@@ -123,13 +135,32 @@ export default function Home2() {
                 aria-label="menu"
                 sx={{ mr: 2 }}
             >
-               
+                <MenuIcon id="basic-button"
+                aria-controls={open ? 'basic-menu' : undefined}
+                aria-haspopup="true"
+                aria-expanded={open ? 'true' : undefined}
+                onClick={handleClick}/>
+                <Menu
+                    id="basic-menu"
+                    anchorEl={anchorEl}
+                    open={open}
+                    onClose={handleMenuClose}
+                    MenuListProps={{
+                    'aria-labelledby': 'basic-button',
+                    }}
+                >
+                    <MenuItem onClick={handleComplete}>Recipes</MenuItem>
+                    <MenuItem onClick={handleMenuClose}>My Adapted Recipes</MenuItem>
+                </Menu>
+
             </IconButton>
-            
-            
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                AppFoodCom
+            </Typography>
+            <Button color="inherit">Login</Button>
             </Toolbar>
         </AppBar>
-        </Box>    
+      </Box>    
 
       <Box sx={{ maxWidth: 400 }}>
       <Stepper activeStep={activeStep} orientation="vertical">
@@ -147,6 +178,7 @@ export default function Home2() {
             <StepContent>
               <Typography>{slide.description}</Typography>
               <Box sx={{ mb: 2 }}>
+              <img src={slide.image} alt={slide.title} style={{ maxWidth: '100%', height: 'auto' }} />
                 <div>
                   <Button
                     variant="contained"
@@ -178,6 +210,9 @@ export default function Home2() {
         )}
         </Box>
 
+     
+
     </div>
+    </ThemeProvider>
   );
 }

@@ -151,11 +151,11 @@ import {data} from '../functions/1Recipe';
       <div>
           <h2>FSa Lights per 100g</h2>
           <ul>        
-             { Object.entries(MyRecipes.fsa_lights_per100g).map(([key, value]) => (
+             {/* { Object.entries(MyRecipes.fsa_lights_per100g).map(([key, value]) => (
               <li key={key}>
                 {key}: {value}
               </li>
-            ))}  
+            ))}   */}
           </ul>
         
         <h2>Ingredients</h2>
