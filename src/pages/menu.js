@@ -1,5 +1,7 @@
 import * as React from 'react';
 import { styled } from '../../node_modules/@mui/material/styles';
+import { useRouter } from 'next/router';
+
 import Box from '../../node_modules/@mui/material/Box';
 import ButtonBase from '../../node_modules/@mui/material/ButtonBase';
 import Typography from '../../node_modules/@mui/material/Typography';
@@ -9,20 +11,35 @@ import Toolbar from '../../node_modules/@mui/material/Toolbar';
 import Button from '../../node_modules/@mui/material/Button';
 import IconButton from '../../node_modules/@mui/material/IconButton';
 
+//Icons
+import LocalDiningIcon from '@mui/icons-material/LocalDining';
+import SearchIcon from '@mui/icons-material/Search';
+import AppSettingsAltIcon from '@mui/icons-material/AppSettingsAlt';
+
 const images = [
   {
-    url: '/images/prawns-959219_1920.jpg',
+    url: '/images/menu/prawns-959219_1920.jpg',
     title: 'Seafood Recipes',
     width: '40%',
   },
   {
-    url: '/images/breakfast-1804457_1920.jpg',
+    url: '/images/menu/breakfast-1804457_1920.jpg',
     title: 'Breakfast Recipes',
     width: '30%',
   },
   {
-    url: '/images/food-3270461_1920.jpg',
-    title: 'Vegetarian Recipes',
+    url: '/images/menu/food-3270461_1920.jpg',
+    title: 'Vegetables Recipes',
+    width: '30%',
+  },
+  {
+    url: '/images/menu/salad-2756467_1920.jpg',
+    title: 'Healthy Recipes',
+    width: '30%',
+  },
+  {
+    url: '/images/menu/salmon-2303843_1920.jpg',
+    title: 'Quick Recipes',
     width: '30%',
   },
 ];
@@ -93,10 +110,17 @@ const ImageMarked = styled('span')(({ theme }) => ({
 }));
 
 export default function ButtonBases() {
+  const router = useRouter();
+
+  const handleNext = () => {
+    router.push('/Search')
+  };
+
   return (
     <div>
         <Box sx={{ flexGrow: 1 }}>
-            <AppBar position="static" color='primary'>
+            {/* Top Bar */}
+            <AppBar position="static" >
                 <Toolbar>
                 <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                     Recipe Collections
@@ -104,6 +128,7 @@ export default function ButtonBases() {
                 </Toolbar>
             </AppBar>
         </Box>    
+        {/* Menu Images */}
         <Box sx={{ display: 'flex', flexWrap: 'wrap', minWidth: 300, width: '100%' }}>
         {images.map((image) => (
             <ImageButton
@@ -115,7 +140,7 @@ export default function ButtonBases() {
             >
             <ImageSrc style={{ backgroundImage: `url(${image.url})` }} />
             <ImageBackdrop className="MuiImageBackdrop-root" />
-            <Image>
+            <Image onClick={handleNext}>
                 <Typography
                 component="span"
                 variant="subtitle1"
@@ -133,6 +158,33 @@ export default function ButtonBases() {
             </Image>
             </ImageButton>
         ))}
+            {/* Bottom Bar */}
+            <AppBar position="fixed" color="default" style={{ backgroundColor: 'white' }} sx={{ top: 'auto', bottom: 0 }}>
+                <Toolbar sx={{ flexGrow: 1 }}>
+                    <Box sx={{ flexGrow: 1 }} />
+                    <Button  color="inherit" style={{ textTransform: 'none', justifyContent: 'center' }}> 
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                            <LocalDiningIcon color="primary" /> 
+                            <div style={{ color: '#1976d2' }}>Recipes</div>
+                        </div>
+                    </Button>
+                    <Box sx={{ flexGrow: 4 }} />
+                    <Button  color="inherit" style={{ textTransform: 'none', justifyContent: 'center' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                            <SearchIcon color="primary"/> 
+                            <div style={{ color: '#1976d2' }}>Search</div>
+                        </div>
+                    </Button>
+                    <Box sx={{ flexGrow: 3 }} />
+                    <Button  color="inherit" style={{ textTransform: 'none', justifyContent: 'center' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                            <AppSettingsAltIcon color="primary"/>
+                            <div style={{ color: '#1976d2' }}>Adapted Recipes</div>
+                        </div>
+                    </Button>
+                    <Box sx={{ flexGrow: 1 }} />
+                </Toolbar>
+            </AppBar>
         </Box>
     </div>
   );

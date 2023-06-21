@@ -1,9 +1,21 @@
 import { doc, getDoc, setDoc, serverTimestamp, onSnapshot, collection } from 'firebase/firestore';
 import { useState, useEffect } from 'react';
 import { db } from '../../firebase.config';
-import {Button} from '../../node_modules/@material-ui/core';
 import {data} from '../functions/1Recipe';
-  
+
+import {data2} from '../functions/data';
+
+import {Button, IconButton} from '../../node_modules/@material-ui/core';
+import Box from '../../node_modules/@mui/material/Box';
+import AppBar from '../../node_modules/@mui/material/AppBar';
+import Toolbar from '../../node_modules/@mui/material/Toolbar';
+import Typography from '../../node_modules/@mui/material/Typography';
+
+import ArrowBackIcon from '../../node_modules/@mui/icons-material/ArrowBack';
+
+import { Card, CardMedia } from '../../node_modules/@mui/material';
+
+
   const CreateRecipe = () => {
      const [MyRecipes, setMyRecipes] = useState([])
   //     index: 0,
@@ -100,11 +112,9 @@ import {data} from '../functions/1Recipe';
       e.preventDefault();
       try {
   //creando documento llamado users y añadiendo un usuario
-        await setDoc(doc(db, 'Recipes', 'MyRecipes'), {
-          data: data,
-          timeStamp: serverTimestamp(),
+        await setDoc(doc(db, 'Prueba', 'DatosPrueba'), {
+          data: data2,
         });
-        setMyRecipes(prevRecipes => [...prevRecipes, data]);
       
       } catch (error) {
         console.log(error);
@@ -117,7 +127,7 @@ import {data} from '../functions/1Recipe';
         (snapShot) => {
           let list = [];
           snapShot.docs.forEach((doc) => {
-            list.push({ id: doc.id, ...doc.data() });
+            list.push({ ...doc.data() });
           });
           setMyRecipes(list);
         },
@@ -145,21 +155,94 @@ import {data} from '../functions/1Recipe';
     };
     return (
       <>
+      <Button onClick={handleAdd}>Crear</Button>
       {MyRecipes.map((recipe,id) => (
-          <p key={id}>{recipe.title}</p>
-        ))}
-      
-      {/* <div>
-      <p>{MyRecipes[0].title?MyRecipes[0].title:''}</p>
-          <h2>FSa Lights per 100g</h2>
+        <>
+          <p key={id}>{recipe.data.title}</p>
+          <h2>FSa Lights per 100g:</h2>
           <ul>        
-            { Object.entries(MyRecipes.fsa_lights_per100g).map(([key, value]) => (
-              <li key={key}>
+            {recipe.data?.fsa_lights_per100g && Object.entries(recipe.data.fsa_lights_per100g).map(([key, value], index) => (
+              <li key={index}>
                 {key}: {value}
               </li>
-            ))}   
+            ))}
           </ul>
+          <h2>Ingredients:</h2>
+          {recipe.data?.ingredients && recipe.data.ingredients.map((ingredient, index) => (
+            <p key={index}>{ingredient.text}</p>
+          ))}
+          <h2>Instructions:</h2>
+          {recipe.data?.instructions && recipe.data.instructions.map((instruction, index) => (
+            <p key={index}>{instruction.text}</p>
+          ))}
+
+        <h2>Nutrition per Ingredient:</h2>
+          {recipe.data?.nutr_per_ingredient && recipe.data.nutr_per_ingredient.map((nutri, index) => (
+            <div key={index}>
+              <strong>Ingredient {index + 1}</strong>
+              <ul>
+                {Object.entries(nutri).map(([key, value], idx) => (
+                  <li key={idx}>
+                    {key}: {value}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+
+        <h2>Nutrition Values per 100g:</h2>
+          <ul>
+            {recipe.data?.nutr_values_per100g && Object.entries(recipe.data.nutr_values_per100g).map(([key, value], index) => (
+              <li key={index}>
+                {key}: {value}
+              </li>
+            ))}
+          </ul>
+
+        <h2>Partition:</h2>
+          <p>{recipe.data?.partition}</p>
+
+        <h2>Quantity:</h2>
+          {recipe.data?.quantity && recipe.data.quantity.map((quant, index) => (
+            <p key={index}>{quant.text}</p>
+          ))}
+
+        <h2>Unit:</h2>
+          {recipe.data?.unit && recipe.data.unit.map((unit, index) => (
+            <p key={index}>{unit.text}</p>
+          ))}
+        <h2>Weight per Ingredient:</h2>
+          {recipe.data?.weight_per_ingr && recipe.data.weight_per_ingr.map((weight, index) => (
+            <p key={index}>{weight}</p>
+          ))}
+
+        <h2>URL:</h2>
+          <img src={recipe.data?.url} alt={recipe.data?.title} />
+          
+          <Box sx={{ flexGrow: 1 }}>
+            <AppBar position="static" color='primary'>
+                <Toolbar>
+                <IconButton
+                    size="large"
+                    edge="start"
+                    color="inherit"
+                    aria-label="menu"
+                    sx={{ mr: 2 }}
+                >
+                    <ArrowBackIcon/>
+                </IconButton>
+                <Typography variant="h6" component="h2" sx={{ flexGrow: 1 }}>
+                  {recipe.data?.title}
+                </Typography>
+                </Toolbar>
+            </AppBar>
+          </Box>
+        </>
+        ))}
+      <div>
         
+      </div>
+     {/* 
         <h2>Ingredients</h2>
         <ul>
         {MyRecipes && MyRecipes.ingredients && MyRecipes.ingredients.map((ingredient, index) => (
