@@ -6,14 +6,14 @@ import { getFirestore } from 'firebase/firestore';
 
 //Web App firebase configuration
 const firebaseConfig = {
-    apiKey: "AIzaSyBQ0LuFpaLczL0T4_YhkUiW_CyG60_DCQU",
-    authDomain: "prueba-34903.firebaseapp.com",
-    databaseURL: "https://prueba-34903-default-rtdb.europe-west1.firebasedatabase.app",
-    projectId: "prueba-34903",
-    storageBucket: "prueba-34903.appspot.com",
-    messagingSenderId: "635811935566",
-    appId: "1:635811935566:web:a55f0de47131dfcebeda1f"
-  };
+  apiKey: "AIzaSyC5o-5hiG_TFo2bu8eI7p8tIwepQf3dDKI",
+  authDomain: "database-770a2.firebaseapp.com",
+  projectId: "database-770a2",
+  storageBucket: "database-770a2.appspot.com",
+  messagingSenderId: "631664887009",
+  appId: "1:631664887009:web:5aa7b8abc00823d2c863a0",
+  measurementId: "G-R9ECGY773N"
+};
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);

@@ -1,7 +1,7 @@
-import { doc, getDoc, setDoc, serverTimestamp, onSnapshot, collection } from 'firebase/firestore';
+import { doc, getDoc, setDoc, serverTimestamp, onSnapshot, collection, limit, query, orderBy } from 'firebase/firestore';
 import { useState, useEffect } from 'react';
 import { db } from '../../firebase.config';
-import {data} from '../functions/1Recipe';
+import { useRouter } from 'next/router';
 
 import {Button, IconButton} from '../../node_modules/@material-ui/core';
 import Box from '../../node_modules/@mui/material/Box';
@@ -71,10 +71,33 @@ const Search = styled('div')(({ theme }) => ({
 
 export default function SearchPage() {
     const [MyRecipes, setMyRecipes] = useState([])
+    const router = useRouter();
+
+    // useEffect(() => {
+    //   const unsub = onSnapshot(
+    //     collection(db, 'Recipes'),
+    //     (snapShot) => {
+    //       let list = [];
+    //       snapShot.docs.forEach((doc) => {
+    //         list.push({ ...doc.data() });
+    //       });
+    //       setMyRecipes(list);
+    //     },
+    //     (error) => {
+    //       console.log(error);
+    //     }
+    //   );
+  
+    //   return () => {
+    //     unsub();
+    //   };
+    // }, []);
 
     useEffect(() => {
+      const q = query(collection(db, 'TestRecipes'), orderBy('id'), limit(20));
+    
       const unsub = onSnapshot(
-        collection(db, 'Recipes'),
+        q,
         (snapShot) => {
           let list = [];
           snapShot.docs.forEach((doc) => {
@@ -86,12 +109,18 @@ export default function SearchPage() {
           console.log(error);
         }
       );
-  
+    
       return () => {
         unsub();
       };
     }, []);
-    console.log(MyRecipes)
+
+    const handleGotoRecipes = () => {
+      router.push('/menu')
+    };
+    // const handleGotoAdaptedRecipes = () => {
+    //   router.push('/menu')
+    // };
   
     return (
       <>
@@ -126,7 +155,7 @@ export default function SearchPage() {
                     <Box sx={{ flexGrow: 1 }} />
                     <Button  color="inherit" style={{ textTransform: 'none', justifyContent: 'center' }}> 
                         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                            <LocalDiningIcon color="primary" /> 
+                            <LocalDiningIcon color="primary" onClick={handleGotoRecipes} /> 
                             <div style={{ color: '#1976d2' }}>Recipes</div>
                         </div>
                     </Button>
@@ -147,8 +176,6 @@ export default function SearchPage() {
                     <Box sx={{ flexGrow: 1 }} />
                 </Toolbar>
             </AppBar>
-
-            
           </Box>
 
 
@@ -159,10 +186,10 @@ export default function SearchPage() {
                 <ListItem>
                     <ListItemAvatar>
                     <Avatar>
-                        <img src={recipe.data.url} style={{ width: '100px', height: '50px' }}/>
+                        <img src={recipe.url_image} style={{ width: '100px', height: '50px' }}/>
                     </Avatar>
                     </ListItemAvatar>
-                    <ListItemText primary={recipe.data.title} />
+                    <ListItemText primary={recipe.title} />
                 </ListItem>
             </List>
         </>
