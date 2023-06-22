@@ -9,7 +9,7 @@ import Link from 'next/link';
   
 
      useEffect(() => {
-      const q = query(collection(db, 'Recipes'), orderBy('id'), limit(2));
+      const q = query(collection(db, 'TestRecipes'), orderBy('id'), limit(2));
     
       const unsub = onSnapshot(
         q,
@@ -34,8 +34,8 @@ import Link from 'next/link';
       <>
         {MyRecipes.map((recipe, id) => (
           <div key={id}>
-            <Link href={`/recipes/${recipe.id}`}>
-              <a>{recipe.title}</a>
+            <Link href={`/${recipe.id}`}>
+              <div>{recipe.title}</div>
             </Link>
           </div>
         ))}

@@ -115,6 +115,12 @@ export default function ButtonBases() {
   const handleNext = () => {
     router.push('/Search')
   };
+  const handleGotoSearch = () => {
+    router.push('/Search')
+  };
+  // const handleGotoAdaptedRecipes = () => {
+  //   router.push('/')
+  // };
 
   return (
     <div>
@@ -171,7 +177,7 @@ export default function ButtonBases() {
                     <Box sx={{ flexGrow: 4 }} />
                     <Button  color="inherit" style={{ textTransform: 'none', justifyContent: 'center' }}>
                         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                            <SearchIcon color="primary"/> 
+                            <SearchIcon color="primary" onClick={handleGotoSearch}/> 
                             <div style={{ color: '#1976d2' }}>Search</div>
                         </div>
                     </Button>

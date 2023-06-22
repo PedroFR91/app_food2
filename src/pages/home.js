@@ -101,6 +101,13 @@ export default function home() {
     router.push('/menu')
   };
 
+  const handleGotoRecipes = () => {
+    router.push('/menu')
+  };
+  const handleGotoSearch = () => {
+    router.push('/Search')
+  };
+
   const slides = [
     {
       title: 'Welcome!',
@@ -218,14 +225,14 @@ export default function home() {
                     <Box sx={{ flexGrow: 1 }} />
                     <Button  color="inherit" style={{ textTransform: 'none', justifyContent: 'center' }}> 
                         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                            <LocalDiningIcon color="primary" /> 
+                            <LocalDiningIcon color="primary" onClick={handleGotoRecipes}/> 
                             <div style={{ color: '#1976d2' }}>Recipes</div>
                         </div>
                     </Button>
                     <Box sx={{ flexGrow: 4 }} />
                     <Button  color="inherit" style={{ textTransform: 'none', justifyContent: 'center' }}>
                         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                            <SearchIcon color="primary"/> 
+                            <SearchIcon color="primary" onClick={handleGotoSearch}/> 
                             <div style={{ color: '#1976d2' }}>Search</div>
                         </div>
                     </Button>

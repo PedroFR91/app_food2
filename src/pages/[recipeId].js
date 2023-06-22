@@ -11,7 +11,7 @@ function Recipe() {
   useEffect(() => {
     const fetchRecipe = async () => {
       if (recipeId) {
-        const docRef = doc(db, 'Recipes', recipeId);
+        const docRef = doc(db, 'TestRecipes', recipeId);
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
@@ -26,14 +26,14 @@ function Recipe() {
   }, [recipeId]);
 
   return(
-    <div>
+    <>
       {recipe && (
         <div>
           <h1>{recipe.title}</h1>
           {/* Render other recipe data here */}
         </div>
       )}
-    </div>
+    </>
   );
 }
 
