@@ -11,7 +11,7 @@ function Recipe() {
   useEffect(() => {
     const fetchRecipe = async () => {
       if (recipeId) {
-        const docRef = doc(db, 'TestRecipes', recipeId);
+        const docRef = doc(db, 'Recipes', recipeId);
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
