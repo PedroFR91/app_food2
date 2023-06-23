@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
-import { ThemeProvider } from '@material-ui/core/styles';
-import theme from '../styles/theme';
+import { makeStyles } from '@material-ui/core/styles';
+import { useRouter } from 'next/router';
 
-import Head from 'next/head';
-import {TextField, Container, Grid, Card, CardMedia, CardContent } from '@material-ui/core';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -27,10 +25,7 @@ import LocalDiningIcon from '@mui/icons-material/LocalDining';
 import SearchIcon from '@mui/icons-material/Search';
 import AppSettingsAltIcon from '@mui/icons-material/AppSettingsAlt';
 
-import { makeStyles } from '@material-ui/core/styles';
-import Slide from './Slide';
 
-import { useRouter } from 'next/router';
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -144,12 +139,12 @@ export default function home() {
                 color="inherit"
                 aria-label="menu"
                 sx={{ mr: 2 }}
+                onClick={handleClick}
             >
                 <MenuIcon id="basic-button"
                 aria-controls={open ? 'basic-menu' : undefined}
                 aria-haspopup="true"
-                aria-expanded={open ? 'true' : undefined}
-                onClick={handleClick}/>
+                aria-expanded={open ? 'true' : undefined}/>
                 <Menu
                     id="basic-menu"
                     anchorEl={anchorEl}

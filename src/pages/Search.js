@@ -96,14 +96,14 @@ export default function SearchPage() {
     // }, []);
 
     useEffect(() => {
-      const q = query(collection(db, 'TestRecipes'), orderBy('id'), limit(20));
+      const q = query(collection(db, 'Recipes'), limit(20));
     
       const unsub = onSnapshot(
         q,
         (snapShot) => {
           let list = [];
           snapShot.docs.forEach((doc) => {
-            list.push({ ...doc.data() });
+            list.push({ ...doc.data(), id: doc.id  });
           });
           setMyRecipes(list);
         },
@@ -123,6 +123,12 @@ export default function SearchPage() {
     // const handleGotoAdaptedRecipes = () => {
     //   router.push('/menu')
     // };
+
+    
+    const handleClickRecipe = (recipe) => {
+      router.push(`/${recipe.id}`)
+    };
+    
   
     return (
       <>
@@ -185,7 +191,7 @@ export default function SearchPage() {
       {MyRecipes.map((recipe,id) => (
         <>
             <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-                <ListItem>
+                <ListItem onClick={() => handleClickRecipe(recipe)}>
                     <ListItemAvatar>
                     <Avatar>
                         <img src={recipe.url_image} style={{ width: '100px', height: '50px' }}/>
@@ -196,7 +202,6 @@ export default function SearchPage() {
             </List>
         </>
         ))}
-
     
     </>
         
