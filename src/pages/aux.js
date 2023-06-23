@@ -32,7 +32,7 @@ import Link from 'next/link';
       <>
         {MyRecipes.map((recipe, id) => (
           <div key={id}>
-            <Link href={`/recipes/${recipe.id}`}>
+            <Link href={`/${recipe.id}`}>
               <div>{recipe.title}</div>
             </Link>
           </div>
