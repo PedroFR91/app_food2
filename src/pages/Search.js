@@ -74,29 +74,10 @@ const Search = styled('div')(({ theme }) => ({
 export default function SearchPage() {
     const [MyRecipes, setMyRecipes] = useState([])
     const router = useRouter();
-
-    // useEffect(() => {
-    //   const unsub = onSnapshot(
-    //     collection(db, 'Recipes'),
-    //     (snapShot) => {
-    //       let list = [];
-    //       snapShot.docs.forEach((doc) => {
-    //         list.push({ ...doc.data() });
-    //       });
-    //       setMyRecipes(list);
-    //     },
-    //     (error) => {
-    //       console.log(error);
-    //     }
-    //   );
-  
-    //   return () => {
-    //     unsub();
-    //   };
-    // }, []);
+    const [searchValue, setSearchValue] = useState('');
 
     useEffect(() => {
-      const q = query(collection(db, 'Recipes'), limit(20));
+      const q = query(collection(db, 'Recipes'));
     
       const unsub = onSnapshot(
         q,
@@ -152,6 +133,8 @@ export default function SearchPage() {
                     <StyledInputBase
                     placeholder="Search the recipes list, e.g "
                     inputProps={{ 'aria-label': 'search' }}
+                    value={searchValue}
+                    onChange={(e) => setSearchValue(e.target.value)}
                     />
                 </Search>
                 </Toolbar>
@@ -160,7 +143,7 @@ export default function SearchPage() {
           </Box>
 
 
-      {MyRecipes.map((recipe,id) => (
+        {MyRecipes.filter(recipe => recipe.title.toLowerCase().includes(searchValue.toLowerCase())).map((recipe, id) => (
         <>
             <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
                 <ListItem onClick={() => handleClickRecipe(recipe)}>
