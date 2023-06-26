@@ -167,55 +167,55 @@ export default function home() {
         </AppBar>
       </Box>    
       {/* Tutorial Steps */}
-      <Box sx={{ maxWidth: 400 }}>
-      <Stepper activeStep={activeStep} orientation="vertical">
-        {slides.map((slide, index) => (
-          <Step key={slide.title}>
-            <StepLabel
-              optional={
-                index === 2 ? (
-                  <Typography variant="caption">Last step</Typography>
-                ) : null
-              }
-            >
-              {slide.title}
-            </StepLabel>
-            <StepContent>
-              <Typography>{slide.description}</Typography>
-              <Box sx={{ mb: 2 }}>
-              <img src={slide.image} alt={slide.title} style={{ maxWidth: '100%', height: 'auto' }} />
-                <div>
-                  <Button
-                    variant="contained"
-                    onClick={handleNext}
-                    sx={{ mt: 1, mr: 1 }}
-                  >
-                    {index === slides.length - 1 ? 'Finish' : 'Continue'}
-                  </Button>
-                  <Button
-                    disabled={index === 0}
-                    onClick={handleBack}
-                    sx={{ mt: 1, mr: 1 }}
-                  >
-                    Back
-                  </Button>
-                </div>
-              </Box>
-            </StepContent>
-          </Step>
-            ))}
-        </Stepper>
-        {activeStep === slides.length && (
-            <Paper square elevation={0} sx={{ p: 3 }}>
-            <Typography>All steps completed - you&apos;re finished</Typography>
-            <Button onClick={handleComplete} sx={{ mt: 1, mr: 1 }}>
-                Menu
-            </Button>
-            </Paper>
-        )}
-        </Box>
+      <Box sx={{ maxWidth: 400, marginBottom: '50px' }}>
+        <Stepper activeStep={activeStep} orientation="vertical">
+          {slides.map((slide, index) => (
+            <Step key={slide.title}>
+              <StepLabel
+                optional={
+                  index === 2 ? (
+                    <Typography variant="caption">Last step</Typography>
+                  ) : null
+                }
+              >
+                {slide.title}
+              </StepLabel>
+              <StepContent>
+                <Typography>{slide.description}</Typography>
+                <Box sx={{ mb: 2 }}>
+                <img src={slide.image} alt={slide.title} style={{ maxWidth: '100%', height: 'auto' }} />
+                  <div>
+                    <Button
+                      variant="contained"
+                      onClick={handleNext}
+                      sx={{ mt: 1, mr: 1 }}
+                    >
+                      {index === slides.length - 1 ? 'Finish' : 'Continue'}
+                    </Button>
+                    <Button
+                      disabled={index === 0}
+                      onClick={handleBack}
+                      sx={{ mt: 1, mr: 1 }}
+                    >
+                      Back
+                    </Button>
+                  </div>
+                </Box>
+              </StepContent>
+            </Step>
+              ))}
+          </Stepper>
+          {activeStep === slides.length && (
+              <Paper square elevation={0} sx={{ p: 3 }}>
+              <Typography>All steps completed - you&apos;re finished</Typography>
+              <Button onClick={handleComplete} sx={{ mt: 1, mr: 1 }}>
+                  Menu
+              </Button>
+              </Paper>
+          )}
+      </Box>
         {/* Bottom Bar */}
-        <AppBar position="fixed" color="default" style={{ backgroundColor: 'white' }} sx={{ top: 'auto', bottom: 0 }}>
+        <AppBar position="fixed" color="default" style={{ backgroundColor: 'white', marginTop: '50px' }} sx={{ top: 'auto', bottom: 0 }}>
                 <Toolbar sx={{ flexGrow: 1 }}>
                     <Box sx={{ flexGrow: 1 }} />
                     <Button  color="inherit" style={{ textTransform: 'none', justifyContent: 'center' }}> 

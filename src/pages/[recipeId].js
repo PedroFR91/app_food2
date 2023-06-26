@@ -3,18 +3,15 @@ import { useRouter } from 'next/router';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../../firebase.config';
 
-
-
-import { makeStyles } from '@material-ui/core/styles';
-
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
 
-import Stack from '@mui/material/Stack';
+import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
 
 //Icons
 import IconButton from '@mui/material/IconButton';
@@ -25,6 +22,16 @@ import AppSettingsAltIcon from '@mui/icons-material/AppSettingsAlt';
 
 import EggAltIcon from '@mui/icons-material/EggAlt';
 import ConstructionIcon from '@mui/icons-material/Construction';
+import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
+
+const Item = styled(Paper)(({ theme }) => ({
+  ...theme.typography.body2,
+  textAlign: 'center',
+  color: 'theme.palette.text.secondary',
+  lineHeight: '30px',
+}));
+
+const lightTheme = createTheme({ palette: { mode: 'light' } });
 
 function Recipe() {
   const router = useRouter();
@@ -52,6 +59,13 @@ function Recipe() {
     setAnchorEl(event.currentTarget);
   };
 
+  const handleGotoRecipes = () => {
+    router.push('/menu')
+  };
+  const handleGotoSearch = () => {
+    router.push('/Search')
+  };
+
   return(
     <>
       {recipe && (
@@ -71,7 +85,7 @@ function Recipe() {
                         <ArrowBackIcon />
                     </IconButton>
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        Title
+                        {recipe.title}
                     </Typography>
                     </Toolbar>
                 </AppBar>
@@ -80,57 +94,146 @@ function Recipe() {
             <Box sx={{ flexGrow: 1 }}>
                 <Grid container spacing={3}>
                 <Grid item xs>
-                    <h5>holi</h5>
+                    <h5>info</h5>
                 </Grid>
                 <Grid item xs>
-                    <h5>holi</h5>
+                    <h5>info</h5>
                 </Grid>
                 <Grid item xs>
-                    <h5>holi</h5>
+                    <h5>info</h5>
                 </Grid>
                 </Grid>
             </Box>
 
             {/* Ingredients */}
-            <Box sx={{ margin: '20px 0', marginLeft: '20px', marginRight: '20px' }}>
-                <Grid container justifyContent="center" alignItems="center" spacing={2}>  
-                <Grid item xs>
-                    <h4>
+            <Box sx={{ margin: '5px 0', marginLeft: '20px', marginRight: '20px' }}>
+                <Grid container justifyContent="center" alignItems="center" spacing={2} sx={{ marginTop: '-5px', marginBottom: '-5px'}}>  
+                    <Grid item xs sx={{ marginLeft: '10px'}}>
+                        <h3>
+                        <IconButton
+                            size="large"
+                            edge="start"
+                            color="inherit"
+                            sx={{ mr: 1 }}
+                        >
+                            <EggAltIcon />
+                        </IconButton>
+                        Ingredients
+                        </h3>
+                    </Grid>
+                    <Grid item xs textAlign="center">
+                        <Button variant="contained">Adapt</Button>
+                    </Grid>
+                </Grid>
+
+                <ThemeProvider theme={lightTheme}>
+                    <Box
+                    sx={{
+                        p: 2,
+                        bgcolor: 'background.default',
+                        display: 'grid',
+                        gridTemplateColumns: { md: '1fr 1fr' },
+                        gap: 0.3,
+                        marginTop: '-5px', marginBottom: '-5px',
+                    }}
+                    >
+                    {recipe.ingredients.map((index) => (
+                        <Item key={index} elevation={index} sx={{ bgcolor: '#ADD8E6' }}>
+                        {index.text}
+                        </Item>
+                    ))}
+                    </Box>
+                </ThemeProvider>
+            </Box>
+
+            {/* Preparation Steps */}
+            <Box sx={{ margin: '0px 0', marginLeft: '20px', marginRight: '20px' }}>
+                <Grid container justifyContent="center" alignItems="center" >  
+                <Grid item xs sx={{ marginLeft: '10px'}}>
+                    <h3>
                     <IconButton
                         size="large"
                         edge="start"
                         color="inherit"
                         sx={{ mr: 1 }}
                     >
-                        <EggAltIcon />
+                        <ConstructionIcon />
                     </IconButton>
-                    Ingredients
-                    </h4>
-                </Grid>
-                <Grid item xs textAlign="center">
-                    <Button variant="contained">Adapt</Button>
+                    Preparation Steps
+                    </h3>
                 </Grid>
                 </Grid>
-            </Box>
             
-            <Box ssx={{ marginLeft: '20px', marginRight: '20px' }}>
-                <Stack spacing={2}>
-                  {recipe.ingredients.map((index) => (
-                    <>
-                        <h5>{index.text}</h5>
-                    </>
+            {/* Steps */}
+            <ThemeProvider theme={lightTheme}>
+                    <Box
+                    sx={{
+                        p: 2,
+                        bgcolor: 'background.default',
+                        display: 'grid',
+                        gridTemplateColumns: { md: '1fr 1fr' },
+                        gap: 0.3,
+                    }}
+                    >
+                    {recipe.instructions.map((index) => (
+                        <Item key={index} elevation={index} sx={{ bgcolor: '#ADD8E6' }}>
+                        {index.text}
+                        </Item>
                     ))}
-                
-                </Stack>
+                    </Box>
+                </ThemeProvider>
+            </Box>
+
+            {/* Comments */}
+            <Box sx={{ margin: '0px 0', marginLeft: '20px', marginRight: '20px', marginBottom: '50px' }}>
+                <Grid container justifyContent="center" alignItems="center" >  
+                <Grid item xs sx={{ marginLeft: '10px'}}>
+                    <h3>
+                    <IconButton
+                        size="large"
+                        edge="start"
+                        color="inherit"
+                        sx={{ mr: 1 }}
+                    >
+                        <QuestionAnswerIcon />
+                    </IconButton>
+                    Comments from the cooker
+                    </h3>
+                </Grid>
+                </Grid>
             </Box>
 
 
 
 
 
-
-          <h1>{recipe.title}</h1>
-          <h1>{recipe.id}</h1>
+          {/* Bottom Bar */}
+            <AppBar position="fixed" color="default" style={{ backgroundColor: 'white', marginTop: '50px' }} sx={{ top: 'auto', bottom: 0 }}>
+                <Toolbar sx={{ flexGrow: 1 }}>
+                    <Box sx={{ flexGrow: 1 }} />
+                    <Button  color="inherit" style={{ textTransform: 'none', justifyContent: 'center' }}> 
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                            <LocalDiningIcon color="primary" onClick={handleGotoRecipes}/> 
+                            <div style={{ color: '#1976d2' }}>Recipes</div>
+                        </div>
+                    </Button>
+                    <Box sx={{ flexGrow: 4 }} />
+                    <Button  color="inherit" style={{ textTransform: 'none', justifyContent: 'center' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                            <SearchIcon color="primary" onClick={handleGotoSearch}/> 
+                            <div style={{ color: '#1976d2' }}>Search</div>
+                        </div>
+                    </Button>
+                    <Box sx={{ flexGrow: 3 }} />
+                    <Button  color="inherit" style={{ textTransform: 'none', justifyContent: 'center' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                            <AppSettingsAltIcon color="primary"/>
+                            <div style={{ color: '#1976d2' }}>Adapted Recipes</div>
+                        </div>
+                    </Button>
+                    <Box sx={{ flexGrow: 1 }} />
+                </Toolbar>
+            </AppBar>
 
           
           

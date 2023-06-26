@@ -157,8 +157,27 @@ export default function SearchPage() {
                 </Toolbar>
             </AppBar>
             
-            {/* Botton Bar */}
-            <AppBar position="fixed" color="default" style={{ backgroundColor: 'white' }} sx={{ top: 'auto', bottom: 0 }}>
+          </Box>
+
+
+      {MyRecipes.map((recipe,id) => (
+        <>
+            <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+                <ListItem onClick={() => handleClickRecipe(recipe)}>
+                    <ListItemAvatar>
+                    <Avatar>
+                        <img src={recipe.url_image} style={{ width: '100px', height: '50px' }}/>
+                    </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText primary={recipe.title} />
+                </ListItem>
+            </List>
+        </>
+        ))}
+
+
+      {/* Botton Bar */}
+      <AppBar position="fixed" color="default" style={{ backgroundColor: 'white', marginTop: '50px' }} sx={{ top: 'auto', bottom: 0 }}>
                 <Toolbar sx={{ flexGrow: 1 }}>
                     <Box sx={{ flexGrow: 1 }} />
                     <Button  color="inherit" style={{ textTransform: 'none', justifyContent: 'center' }}> 
@@ -184,24 +203,6 @@ export default function SearchPage() {
                     <Box sx={{ flexGrow: 1 }} />
                 </Toolbar>
             </AppBar>
-          </Box>
-
-
-
-      {MyRecipes.map((recipe,id) => (
-        <>
-            <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-                <ListItem onClick={() => handleClickRecipe(recipe)}>
-                    <ListItemAvatar>
-                    <Avatar>
-                        <img src={recipe.url_image} style={{ width: '100px', height: '50px' }}/>
-                    </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText primary={recipe.title} />
-                </ListItem>
-            </List>
-        </>
-        ))}
     
     </>
         
