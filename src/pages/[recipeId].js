@@ -41,7 +41,7 @@ function Recipe() {
   useEffect(() => {
     const fetchRecipe = async () => {
       if (recipeId) {
-        const docRef = doc(db, 'Recipes', recipeId);
+        const docRef = doc(db, 'RecipesGOOD', recipeId);
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
@@ -92,17 +92,13 @@ function Recipe() {
             </Box>    
             {/* Aditional Info */}
             <Box sx={{ flexGrow: 1 }}>
-                <Grid container spacing={3}>
-                <Grid item xs>
-                    <h5>info</h5>
+            <Grid container justifyContent="center" alignItems="center">
+                <Grid item xs={12}>
+                    <Box sx={{ width: '100%' }}>
+                        <img src={recipe.url_image} alt="Imagen" style={{ width: '100%', height: 'auto' }} />
+                    </Box>
                 </Grid>
-                <Grid item xs>
-                    <h5>info</h5>
-                </Grid>
-                <Grid item xs>
-                    <h5>info</h5>
-                </Grid>
-                </Grid>
+            </Grid>
             </Box>
 
             {/* Ingredients */}

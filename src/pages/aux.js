@@ -1,4 +1,4 @@
-import { doc, getDoc, setDoc, serverTimestamp, onSnapshot, collection, limit, query, orderBy } from 'firebase/firestore';
+import { doc, getDoc, setDoc, serverTimestamp, onSnapshot, collection, limit, query, where, orderBy } from 'firebase/firestore';
 import { useState, useEffect } from 'react';
 import { db } from '../../firebase.config';
 import { useRouter } from 'next/router';
@@ -25,6 +25,16 @@ import AppSettingsAltIcon from '@mui/icons-material/AppSettingsAlt';
 import { styled, alpha } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
 
+
+
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#70b578', // Aquí puedes especificar tu nuevo color primario
+    },
+  },
+});
 
 
 const Search = styled('div')(({ theme }) => ({
@@ -70,6 +80,7 @@ const Search = styled('div')(({ theme }) => ({
     },
   }));
 
+  
 
 export default function SearchPage() {
     const [MyRecipes, setMyRecipes] = useState([])
@@ -77,22 +88,19 @@ export default function SearchPage() {
     const [searchValue, setSearchValue] = useState('');
 
     useEffect(() => {
-      const q = query(collection(db, 'Recipes'));
-    
+      const q = query(collection(db, 'RecipesGOOD'), where('title', '==', 'Salad'));
+  
       const unsub = onSnapshot(
         q,
-        (snapShot) => {
-          let list = [];
-          snapShot.docs.forEach((doc) => {
-            list.push({ ...doc.data(), id: doc.id  });
-          });
-          setMyRecipes(list);
+        (snapshot) => {
+          const recipesData = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+          setMyRecipes(recipesData);
         },
         (error) => {
           console.log(error);
         }
       );
-    
+  
       return () => {
         unsub();
       };
@@ -101,9 +109,9 @@ export default function SearchPage() {
     const handleGotoRecipes = () => {
       router.push('/menu')
     };
-    // const handleGotoAdaptedRecipes = () => {
-    //   router.push('/menu')
-    // };
+     const handleGotoAdaptedRecipes = () => {
+       router.push('/aux')
+     };
 
     
     const handleClickRecipe = (recipe) => {
@@ -113,6 +121,7 @@ export default function SearchPage() {
   
     return (
       <>
+      <ThemeProvider theme={theme}>
       <Box sx={{ flexGrow: 1 }}>
             {/* Top Bar */}
             <AppBar position="static" >
@@ -131,10 +140,10 @@ export default function SearchPage() {
                     <SearchIcon />
                     </SearchIconWrapper>
                     <StyledInputBase
-                      placeholder="Search the recipes list, e.g "
-                      inputProps={{ 'aria-label': 'search' }}
-                      value={searchValue}
-                      onChange={(e) => setSearchValue(e.target.value)}
+                    placeholder="Search the recipes list, e.g "
+                    inputProps={{ 'aria-label': 'search' }}
+                    value={searchValue}
+                    onChange={(e) => setSearchValue(e.target.value)}
                     />
                 </Search>
                 </Toolbar>
@@ -143,7 +152,7 @@ export default function SearchPage() {
           </Box>
 
 
-      {MyRecipes.filter(recipe => recipe.title.toLowerCase().includes(searchValue.toLowerCase())).map((recipe, id) => (
+        {MyRecipes.filter(recipe => recipe.title.toLowerCase().includes(searchValue.toLowerCase())).map((recipe, id) => (
         <>
             <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
                 <ListItem onClick={() => handleClickRecipe(recipe)}>
@@ -165,8 +174,8 @@ export default function SearchPage() {
                     <Box sx={{ flexGrow: 1 }} />
                     <Button  color="inherit" style={{ textTransform: 'none', justifyContent: 'center' }}> 
                         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                            <LocalDiningIcon color="primary" onClick={handleGotoRecipes} /> 
-                            <div style={{ color: '#1976d2' }}>Recipes</div>
+                            <LocalDiningIcon onClick={handleGotoRecipes} /> 
+                            <div>Recipes</div>
                         </div>
                     </Button>
                     <Box sx={{ flexGrow: 4 }} />
@@ -179,14 +188,14 @@ export default function SearchPage() {
                     <Box sx={{ flexGrow: 3 }} />
                     <Button  color="inherit" style={{ textTransform: 'none', justifyContent: 'center' }}>
                         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                            <AppSettingsAltIcon color="primary"/>
-                            <div style={{ color: '#1976d2' }}>Adapted Recipes</div>
+                            <AppSettingsAltIcon onClick={handleGotoAdaptedRecipes}/>
+                            <div>Adapted Recipes</div>
                         </div>
                     </Button>
                     <Box sx={{ flexGrow: 1 }} />
                 </Toolbar>
             </AppBar>
-    
+            </ThemeProvider>
     </>
         
     )

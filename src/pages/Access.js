@@ -2,6 +2,16 @@ import React, { useState } from "react";
 import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { createTheme, ThemeProvider } from '@material-ui/core/styles';
 import { auth, db } from '../../firebase.config';
+
+
+import Typography from '@mui/material/Typography';
+import Stack from '@mui/material/Stack';
+import Box from '@mui/material/Box';
+
+import Divider from '@mui/material/Divider';
+
+
+
 import {
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
@@ -74,26 +84,31 @@ export default function SignInForm() {
 
   return (
     <div style={{ position: 'relative', height: '100vh' }}>
-      
-      <Container maxWidth="xs" style={{ position: 'relative', zIndex: 1 }}>
-        <Grid
-          container
-          spacing={2}
-          direction="column"
-          alignItems="center"
-          style={{ paddingTop: '2rem' }}
-        >
-          <Grid item xs={12}>
-          <Head>
-            <title>AppFoodCom</title>
-          </Head>
-          </Grid>
-          
-          <Grid item xs={12}>
-            <img src='/images/icon_def.png' alt="Logo" style={{ position: "relative", width: '90%' }} />
-          </Grid>
-          <div >
-      {toggleView ? (
+        <Box sx={{ width: '100%' }}>
+            <Box sx={{ height: '20px' }} />
+            <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }} justifyContent="center" alignItems="center">
+                <Grid item xs={2}>
+                <img src='/images/favicon.ico' alt="Logo" style={{ position: "relative", width: '100%' }} />
+                </Grid>
+                <Grid item xs={6}>
+                    <Typography variant="h4" gutterBottom>
+                        AppFoodCom
+                    </Typography>
+                </Grid>
+            
+            </Grid>
+        
+            <Box sx={{ height: '20px' }} />
+            {/* Línea horizontal */}
+            <Divider />
+
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <img src='/images/icon_def.png' alt="Logo" style={{ position: "relative", width: '60%' }} />
+            </div>
+            <Box sx={{ height: '20px' }} />
+
+        <div>
+        {toggleView ? (
         <div>
         <form >
             <Grid item xs={12}>
@@ -107,6 +122,7 @@ export default function SignInForm() {
                 focused
               />
             </Grid>
+            <Box sx={{ height: '10px' }} />
             <Grid item xs={12}>
               <TextField
                 type="password"
@@ -118,9 +134,11 @@ export default function SignInForm() {
               />
             </Grid>
             <Grid item xs={12}>
+              <Box sx={{ height: '20px' }} />
               <Button type="submit" variant="contained" color="primary" fullWidth>
                 Create Account
               </Button>
+              <Box sx={{ height: '20px' }} />
             </Grid>
         </form>
         </div>
@@ -131,8 +149,6 @@ export default function SignInForm() {
               <TextField
                 type="email"
                 label="Email"
-                variant="outlined"
-                fullWidth
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 focused
@@ -162,15 +178,16 @@ export default function SignInForm() {
         </div>
       )}
       <div>
-        <div onClick={() => setToggleView(!toggleView)}>
+        <div onClick={() => setToggleView(!toggleView)} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            
           {toggleView
             ? 'Are you registered?, Log in'
             : '¿No tienes cuenta?, creala'}
         </div>
       </div>
     </div>
-      </Grid>
-    </Container>
+
+        </Box>
     </div>
   );
 }

@@ -77,7 +77,7 @@ export default function SearchPage() {
     const [searchValue, setSearchValue] = useState('');
 
     useEffect(() => {
-      const q = query(collection(db, 'Recipes'));
+      const q = query(collection(db, 'RecipesGOOD'));
     
       const unsub = onSnapshot(
         q,
@@ -101,9 +101,9 @@ export default function SearchPage() {
     const handleGotoRecipes = () => {
       router.push('/menu')
     };
-    // const handleGotoAdaptedRecipes = () => {
-    //   router.push('/menu')
-    // };
+     const handleGotoAdaptedRecipes = () => {
+       router.push('/aux')
+     };
 
     
     const handleClickRecipe = (recipe) => {
@@ -165,8 +165,8 @@ export default function SearchPage() {
                     <Box sx={{ flexGrow: 1 }} />
                     <Button  color="inherit" style={{ textTransform: 'none', justifyContent: 'center' }}> 
                         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                            <LocalDiningIcon color="primary" onClick={handleGotoRecipes} /> 
-                            <div style={{ color: '#1976d2' }}>Recipes</div>
+                            <LocalDiningIcon onClick={handleGotoRecipes} /> 
+                            <div>Recipes</div>
                         </div>
                     </Button>
                     <Box sx={{ flexGrow: 4 }} />
@@ -179,8 +179,8 @@ export default function SearchPage() {
                     <Box sx={{ flexGrow: 3 }} />
                     <Button  color="inherit" style={{ textTransform: 'none', justifyContent: 'center' }}>
                         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                            <AppSettingsAltIcon color="primary"/>
-                            <div style={{ color: '#1976d2' }}>Adapted Recipes</div>
+                            <AppSettingsAltIcon onClick={handleGotoAdaptedRecipes}/>
+                            <div>Adapted Recipes</div>
                         </div>
                     </Button>
                     <Box sx={{ flexGrow: 1 }} />
