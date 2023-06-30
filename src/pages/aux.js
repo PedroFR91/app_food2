@@ -1,202 +1,270 @@
-import { doc, getDoc, setDoc, serverTimestamp, onSnapshot, collection, limit, query, where, orderBy } from 'firebase/firestore';
-import { useState, useEffect } from 'react';
-import { db } from '../../firebase.config';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '../../firebase.config';
 
-import {Button, IconButton} from '../../node_modules/@material-ui/core';
-import Box from '../../node_modules/@mui/material/Box';
-import AppBar from '../../node_modules/@mui/material/AppBar';
-import Toolbar from '../../node_modules/@mui/material/Toolbar';
-import Typography from '../../node_modules/@mui/material/Typography';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
 
-//List
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import Avatar from '@mui/material/Avatar';
+import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
 
 //Icons
+import IconButton from '@mui/material/IconButton';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import LocalDiningIcon from '@mui/icons-material/LocalDining';
 import SearchIcon from '@mui/icons-material/Search';
 import AppSettingsAltIcon from '@mui/icons-material/AppSettingsAlt';
 
-//Search
-import { styled, alpha } from '@mui/material/styles';
-import InputBase from '@mui/material/InputBase';
+import EggAltIcon from '@mui/icons-material/EggAlt';
+import ConstructionIcon from '@mui/icons-material/Construction';
+import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
 
+const Item = styled(Paper)(({ theme }) => ({
+  ...theme.typography.body2,
+  textAlign: 'center',
+  color: 'theme.palette.text.secondary',
+  lineHeight: '30px',
+}));
 
+const lightTheme = createTheme({ palette: { mode: 'light' } });
 
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: '#70b578', // Aquí puedes especificar tu nuevo color primario
-    },
-  },
-});
+function Recipe() {
+  const router = useRouter();
+  const { recipeId } = router.query;
+  const [recipe, setRecipe] = useState(null);
+  const [previousPage, setPreviousPage] = useState(null);
 
+  useEffect(() => {
+    const fetchRecipe = async () => {
+      if (recipeId) {
+        const docRef = doc(db, 'Recipes', recipeId);
+        const docSnap = await getDoc(docRef);
 
-const Search = styled('div')(({ theme }) => ({
-    position: 'relative',
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: alpha(theme.palette.common.white, 0.15),
-    '&:hover': {
-      backgroundColor: alpha(theme.palette.common.white, 0.25),
-    },
-    marginLeft: 0,
-    width: '100%',
-    [theme.breakpoints.up('sm')]: {
-      marginLeft: theme.spacing(1),
-      width: 'auto',
-    },
-  }));
-  
-  const SearchIconWrapper = styled('div')(({ theme }) => ({
-    padding: theme.spacing(0, 2),
-    height: '100%',
-    position: 'absolute',
-    pointerEvents: 'none',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  }));
-  
-  const StyledInputBase = styled(InputBase)(({ theme }) => ({
-    color: 'inherit',
-    '& .MuiInputBase-input': {
-      fontSize: '0.8rem', // Tamaño de fuente más pequeño
-      padding: theme.spacing(1, 1, 1, 0),
-      // vertical padding + font size from searchIcon
-      paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-      transition: theme.transitions.create('width'),
-      width: '100%',
-      [theme.breakpoints.up('sm')]: {
-        width: '12ch',
-        '&:focus': {
-          width: '20ch',
-        },
-      },
-    },
-  }));
-
-  
-
-export default function SearchPage() {
-    const [MyRecipes, setMyRecipes] = useState([])
-    const router = useRouter();
-    const [searchValue, setSearchValue] = useState('');
-
-    useEffect(() => {
-      const q = query(collection(db, 'RecipesGOOD'), where('title', '==', 'Salad'));
-  
-      const unsub = onSnapshot(
-        q,
-        (snapshot) => {
-          const recipesData = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-          setMyRecipes(recipesData);
-        },
-        (error) => {
-          console.log(error);
+        if (docSnap.exists()) {
+          setRecipe(docSnap.data());
+        } else {
+          console.log("No such document!");
         }
-      );
-  
-      return () => {
-        unsub();
-      };
-    }, []);
-
-    const handleGotoRecipes = () => {
-      router.push('/menu')
+      }
     };
-     const handleGotoAdaptedRecipes = () => {
-       router.push('/aux')
-     };
 
-    
-    const handleClickRecipe = (recipe) => {
-      router.push(`/${recipe.id}`)
+    fetchRecipe();
+
+    // Obtiene la ruta de la página anterior
+    const previousPagePath = sessionStorage.getItem('previousPage');
+    setPreviousPage(previousPagePath);
+    sessionStorage.setItem('previousPage', router.asPath);
+
+    // Limpia la referencia de la página anterior al desmontar el componente
+    return () => {
+      sessionStorage.removeItem('previousPage');
     };
-    
-  
-    return (
-      <>
-      <ThemeProvider theme={theme}>
-      <Box sx={{ flexGrow: 1 }}>
-            {/* Top Bar */}
-            <AppBar position="static" >
-                <Toolbar>
-                <Typography variant="h6" component="h2" sx={{ flexGrow: 1 }}>
-                    Search for recipes
-                </Typography>
-                </Toolbar>
-            </AppBar>
+  }, [recipeId, router]);
 
-            {/* Search Bar */}
-            <AppBar position="static" style={{ backgroundColor: 'white' }}>
-                <Toolbar>
-                <Search  style={{ backgroundColor: '#64b5f6' }}>
-                    <SearchIconWrapper >
-                    <SearchIcon />
-                    </SearchIconWrapper>
-                    <StyledInputBase
-                    placeholder="Search the recipes list, e.g "
-                    inputProps={{ 'aria-label': 'search' }}
-                    value={searchValue}
-                    onChange={(e) => setSearchValue(e.target.value)}
-                    />
-                </Search>
-                </Toolbar>
-            </AppBar>
+  const handleGoBack = () => {
+    if (previousPage) {
+      router.push(previousPage);
+    } else {
+      // Si no hay referencia de página anterior, redirigir a una ruta por defecto
+      router.push('/Search');
+    }
+  };
+
+  const handleGotoRecipes = () => {
+    router.push('/menu')
+  };
+  const handleGotoSearch = () => {
+    router.push('/Search')
+  };
+
+  return(
+    <>
+      {recipe && (
+        <div>
+            <Box sx={{ flexGrow: 1 }}>
+                {/* Top Bar */}
+                <AppBar position="static" color='primary'>
+                    <Toolbar>
+                    <IconButton
+                        size="large"
+                        edge="start"
+                        color="inherit"
+                        aria-label="menu"
+                        sx={{ mr: 2 }}
+                        onClick={handleGoBack}
+                    >
+                        <ArrowBackIcon />
+                    </IconButton>
+                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                        {recipe.title}
+                    </Typography>
+                    </Toolbar>
+                </AppBar>
+            </Box>    
+            {/* Aditional Info */}
+            <Box sx={{ flexGrow: 1 }}>
+            <Grid container justifyContent="center" alignItems="center">
+                <Grid item xs={12}>
+                    <Box sx={{ width: '100%' }}>
+                        <img src={recipe.url_image} 
+                            alt="Imagen" 
+                            style={{ width: '100%', height: 'auto' }}
+                            onError={(e) => {
+                                e.target.src = '/images/icon_def.png';
+                              }} />
+                    </Box>
+                </Grid>
+            </Grid>
+            </Box>
+
+            {/* Ingredients */}
+            <Box sx={{ margin: '5px 0', marginLeft: '20px', marginRight: '20px' }}>
+                <Grid container justifyContent="center" alignItems="center" spacing={2} sx={{ marginTop: '-5px', marginBottom: '-5px'}}>  
+                    <Grid item xs sx={{ marginLeft: '10px'}}>
+                        <h3>
+                        <IconButton
+                            size="large"
+                            edge="start"
+                            color="inherit"
+                            sx={{ mr: 1 }}
+                        >
+                            <EggAltIcon />
+                        </IconButton>
+                        Ingredients
+                        </h3>
+                    </Grid>
+                    <Grid item xs textAlign="center">
+                        <Button variant="contained">Adapt</Button>
+                    </Grid>
+                </Grid>
+
+                <ThemeProvider theme={lightTheme}>
+                    <Box
+                    sx={{
+                        p: 2,
+                        bgcolor: 'background.default',
+                        display: 'grid',
+                        gridTemplateColumns: { md: '1fr 1fr' },
+                        gap: 0.3,
+                        marginTop: '-5px', marginBottom: '-5px',
+                    }}
+                    >
+                    {recipe.ingredients.map((index) => (
+                        <Item key={index} elevation={index} sx={{ bgcolor: '#ADD8E6' }}>
+                        {index.text}
+                        </Item>
+                    ))}
+                    </Box>
+                </ThemeProvider>
+            </Box>
+
+            {/* Preparation Steps */}
+            <Box sx={{ margin: '0px 0', marginLeft: '20px', marginRight: '20px' }}>
+                <Grid container justifyContent="center" alignItems="center" >  
+                <Grid item xs sx={{ marginLeft: '10px'}}>
+                    <h3>
+                    <IconButton
+                        size="large"
+                        edge="start"
+                        color="inherit"
+                        sx={{ mr: 1 }}
+                    >
+                        <ConstructionIcon />
+                    </IconButton>
+                    Preparation Steps
+                    </h3>
+                </Grid>
+                </Grid>
             
-          </Box>
+            {/* Steps */}
+            <ThemeProvider theme={lightTheme}>
+                    <Box
+                    sx={{
+                        p: 2,
+                        bgcolor: 'background.default',
+                        display: 'grid',
+                        gridTemplateColumns: { md: '1fr 1fr' },
+                        gap: 0.3,
+                    }}
+                    >
+                    {recipe.instructions.map((instruction, index) => {
+                    if (!isNaN(parseInt(instruction.text.charAt(0), 10))) {
+                        return null; // Omitir la instrucción si comienza con un número
+                    }
+                    return (
+                        <Item key={index} elevation={index} sx={{ bgcolor: '#ADD8E6' }}>
+                        {instruction.text}
+                        </Item>
+                    );
+                    })}
+                    </Box>
+                </ThemeProvider>
+            </Box>
+
+            {/* Comments */}
+            <Box sx={{ margin: '0px 0', marginLeft: '20px', marginRight: '20px', marginBottom: '50px' }}>
+                <Grid container justifyContent="center" alignItems="center" >  
+                <Grid item xs sx={{ marginLeft: '10px'}}>
+                    <h3>
+                    <IconButton
+                        size="large"
+                        edge="start"
+                        color="inherit"
+                        sx={{ mr: 1 }}
+                    >
+                        <QuestionAnswerIcon />
+                    </IconButton>
+                    Comments from the cooker
+                    </h3>
+                </Grid>
+                </Grid>
+            </Box>
 
 
-        {MyRecipes.filter(recipe => recipe.title.toLowerCase().includes(searchValue.toLowerCase())).map((recipe, id) => (
-        <>
-            <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-                <ListItem onClick={() => handleClickRecipe(recipe)}>
-                    <ListItemAvatar>
-                    <Avatar>
-                        <img src={recipe.url_image} style={{ width: '100px', height: '50px' }}/>
-                    </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText primary={recipe.title} />
-                </ListItem>
-            </List>
-        </>
-        ))}
 
 
-      {/* Botton Bar */}
-      <AppBar position="fixed" color="default" style={{ backgroundColor: 'white', marginTop: '50px' }} sx={{ top: 'auto', bottom: 0 }}>
+
+          {/* Bottom Bar */}
+            <AppBar position="fixed" color="default" style={{ backgroundColor: 'white', marginTop: '50px' }} sx={{ top: 'auto', bottom: 0 }}>
                 <Toolbar sx={{ flexGrow: 1 }}>
                     <Box sx={{ flexGrow: 1 }} />
                     <Button  color="inherit" style={{ textTransform: 'none', justifyContent: 'center' }}> 
                         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                            <LocalDiningIcon onClick={handleGotoRecipes} /> 
+                            <LocalDiningIcon  onClick={handleGotoRecipes}/> 
                             <div>Recipes</div>
                         </div>
                     </Button>
                     <Box sx={{ flexGrow: 4 }} />
                     <Button  color="inherit" style={{ textTransform: 'none', justifyContent: 'center' }}>
                         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                            <SearchIcon color="primary"/> 
-                            <div style={{ color: '#1976d2' }}>Search</div>
+                            <SearchIcon 
+                                color={previousPage === '/Search' ? 'inherit' : 'primary'} 
+                                onClick={handleGotoSearch}/> 
+                            <div style={{ color: previousPage === '/Search' ? 'inherit' : '#1976d2' }}>Search</div>
                         </div>
                     </Button>
                     <Box sx={{ flexGrow: 3 }} />
                     <Button  color="inherit" style={{ textTransform: 'none', justifyContent: 'center' }}>
                         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                            <AppSettingsAltIcon onClick={handleGotoAdaptedRecipes}/>
+                            <AppSettingsAltIcon/>
                             <div>Adapted Recipes</div>
                         </div>
                     </Button>
                     <Box sx={{ flexGrow: 1 }} />
                 </Toolbar>
             </AppBar>
-            </ThemeProvider>
+
+          
+          
+        </div>
+      )}
     </>
-        
-    )
-  }
+  );
+}
+
+export default Recipe;

@@ -21,11 +21,13 @@ const images = [
     url: '/images/menu/prawns-959219_1920.jpg',
     title: 'Seafood Recipes',
     width: '40%',
+    route: '/Bake',
   },
   {
     url: '/images/menu/breakfast-1804457_1920.jpg',
     title: 'Breakfast Recipes',
     width: '30%',
+    route: '/Bake',
   },
   {
     url: '/images/menu/food-3270461_1920.jpg',
@@ -122,6 +124,10 @@ export default function ButtonBases() {
      router.push('/aux')
    };
 
+  const handleImageClick = (route) => {
+    router.push(route); // Redirigir a la ruta correspondiente cuando se hace clic en la imagen
+  };
+
   return (
     <div>
         <Box sx={{ flexGrow: 1 }}>
@@ -135,14 +141,15 @@ export default function ButtonBases() {
             </AppBar>
         </Box>    
         {/* Menu Images */}
-        <Box sx={{ display: 'flex', flexWrap: 'wrap', minWidth: 300, width: '100%' }}>
+        <Box sx={{ paddingBottom: '50px' }}>  
         {images.map((image) => (
             <ImageButton
-            focusRipple
-            key={image.title}
-            style={{
-                width: image.width,
-            }}
+              focusRipple
+              key={image.title}
+              style={{
+                  width: image.width,
+              }}
+              onClick={() => handleImageClick(image.route)} // Agregar el manejador de eventos para el clic en la imagen
             >
             <ImageSrc style={{ backgroundImage: `url(${image.url})` }} />
             <ImageBackdrop className="MuiImageBackdrop-root" />
@@ -164,6 +171,7 @@ export default function ButtonBases() {
             </Image>
             </ImageButton>
         ))}
+        </Box>
             {/* Bottom Bar */}
             <AppBar position="fixed" color="default" style={{ backgroundColor: 'white' }} sx={{ top: 'auto', bottom: 0 }}>
                 <Toolbar sx={{ flexGrow: 1 }}>
@@ -191,7 +199,7 @@ export default function ButtonBases() {
                     <Box sx={{ flexGrow: 1 }} />
                 </Toolbar>
             </AppBar>
-        </Box>
+        
     </div>
   );
 }

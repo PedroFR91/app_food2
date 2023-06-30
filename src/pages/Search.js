@@ -1,4 +1,4 @@
-import { doc, getDoc, setDoc, serverTimestamp, onSnapshot, collection, limit, query, orderBy } from 'firebase/firestore';
+import { doc, getDoc, setDoc, serverTimestamp, onSnapshot, collection, limit, where, query, orderBy } from 'firebase/firestore';
 import { useState, useEffect } from 'react';
 import { db } from '../../firebase.config';
 import { useRouter } from 'next/router';
@@ -20,6 +20,8 @@ import Avatar from '@mui/material/Avatar';
 import LocalDiningIcon from '@mui/icons-material/LocalDining';
 import SearchIcon from '@mui/icons-material/Search';
 import AppSettingsAltIcon from '@mui/icons-material/AppSettingsAlt';
+import MenuBookIcon from '@mui/icons-material/MenuBook';
+import RamenDiningIcon from '@mui/icons-material/RamenDining';
 
 //Search
 import { styled, alpha } from '@mui/material/styles';
@@ -75,9 +77,13 @@ export default function SearchPage() {
     const [MyRecipes, setMyRecipes] = useState([])
     const router = useRouter();
     const [searchValue, setSearchValue] = useState('');
+    const [searchIngredientsValue, setSearchIngredientsValue] = useState('');
+    const [searchType, setSearchType] = useState('title');
+
+
 
     useEffect(() => {
-      const q = query(collection(db, 'RecipesGOOD'));
+      const q = query(collection(db, 'Recipes'), limit(20));
     
       const unsub = onSnapshot(
         q,
@@ -98,19 +104,49 @@ export default function SearchPage() {
       };
     }, []);
 
+    useEffect(() => {
+      let unsubscribe = () => {};
+      
+      if (searchValue.length >= 3) {
+          unsubscribe = onSnapshot(
+              query(
+                  collection(db, 'Recipes'),
+                  where('title', '>=', searchValue.toLowerCase()),
+                  where('ingredients', 'array-contains', searchIngredientsValue.toLowerCase())
+
+              ),
+              (snapshot) => {
+                  let list = [];
+                  snapshot.docs.forEach((doc) => {
+                      list.push({ id: doc.id, ...doc.data() });
+                  });
+                  setMyRecipes(list);
+            },
+            (error) => {
+                console.log(error);
+            }
+        );
+      } else {
+          setMyRecipes([]);
+      }
+
+      return () => unsubscribe();
+    }, [searchValue]);
+
+    
+
     const handleGotoRecipes = () => {
       router.push('/menu')
     };
      const handleGotoAdaptedRecipes = () => {
        router.push('/aux')
      };
-
     
     const handleClickRecipe = (recipe) => {
       router.push(`/${recipe.id}`)
     };
     
-  
+    console.log(searchValue);
     return (
       <>
       <Box sx={{ flexGrow: 1 }}>
@@ -126,37 +162,82 @@ export default function SearchPage() {
             {/* Search Bar */}
             <AppBar position="static" style={{ backgroundColor: 'white' }}>
                 <Toolbar>
-                <Search  style={{ backgroundColor: '#64b5f6' }}>
-                    <SearchIconWrapper >
-                    <SearchIcon />
-                    </SearchIconWrapper>
-                    <StyledInputBase
-                    placeholder="Search the recipes list, e.g "
+                <Search style={{ backgroundColor: '#64b5f6' }}>
+                  <SearchIconWrapper>
+                  <SearchIcon />
+                  </SearchIconWrapper>
+                  <StyledInputBase
+                    placeholder={
+                      searchType === 'title'
+                        ? 'Search the recipes list'
+                        : 'Search ingredients'
+                    }
                     inputProps={{ 'aria-label': 'search' }}
-                    value={searchValue}
-                    onChange={(e) => setSearchValue(e.target.value)}
-                    />
+                    value={
+                      searchType === 'title'
+                        ? searchValue
+                        : searchIngredientsValue
+                    }
+                    onChange={(e) =>
+                      searchType === 'title'
+                        ? setSearchValue(e.target.value)
+                        : setSearchIngredientsValue(e.target.value)
+                    }
+                  />
                 </Search>
+                <Box marginLeft="auto">
+                  <IconButton
+                    onClick={() =>
+                      setSearchType(
+                        searchType === 'title' ? 'ingredients' : 'title'
+                      )
+                    }
+                  >
+                    {searchType === 'title' ? (
+                      <MenuBookIcon />
+                    ) : (
+                      <RamenDiningIcon />
+                    )}
+                  </IconButton>
+                  </Box>
                 </Toolbar>
             </AppBar>
             
           </Box>
 
-
-        {MyRecipes.filter(recipe => recipe.title.toLowerCase().includes(searchValue.toLowerCase())).map((recipe, id) => (
-        <>
-            <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-                <ListItem onClick={() => handleClickRecipe(recipe)}>
-                    <ListItemAvatar>
-                    <Avatar>
-                        <img src={recipe.url_image} style={{ width: '100px', height: '50px' }}/>
-                    </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText primary={recipe.title} />
-                </ListItem>
-            </List>
-        </>
-        ))}
+        <Box sx={{ paddingBottom: '50px' }}>             
+          {MyRecipes.filter((recipe) => {
+            if (searchType === 'title') {
+              return (
+                recipe.title.toLowerCase().includes(searchValue.toLowerCase()) &&
+                recipe.ingredients.some((ingredient) =>
+                  ingredient.text.toLowerCase().includes(searchValue.toLowerCase())
+                )
+              );
+            } else {
+              return recipe.ingredients.some((ingredient) =>
+                ingredient.text.toLowerCase().includes(searchIngredientsValue.toLowerCase())
+              );
+            }
+          }).map((recipe, id) => (
+          <>
+                <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+                  <ListItem onClick={() => handleClickRecipe(recipe)}>
+                      <ListItemAvatar>
+                      <Avatar>
+                          <img src={recipe.url_image}
+                          style={{ width: '100px', height: '50px' }}
+                          onError={(e) => {
+                            e.target.src = '/images/icon_def.png';
+                          }}/>
+                      </Avatar>
+                      </ListItemAvatar>
+                      <ListItemText primary={recipe.title} />
+                  </ListItem>
+              </List>   
+          </>
+          ))}
+        </Box>
 
 
       {/* Botton Bar */}
