@@ -113,7 +113,6 @@ export default function SearchPage() {
                   collection(db, 'Recipes'),
                   where('title', '>=', searchValue.toLowerCase()),
                   where('ingredients', 'array-contains', searchIngredientsValue.toLowerCase())
-
               ),
               (snapshot) => {
                   let list = [];

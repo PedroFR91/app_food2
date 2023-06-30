@@ -24,7 +24,7 @@ import EggAltIcon from '@mui/icons-material/EggAlt';
 import ConstructionIcon from '@mui/icons-material/Construction';
 import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
 
-import { obtener_receta } from '../../api.py'; // Asegúrate de ajustar la ruta del archivo de la API REST
+// import { obtener_receta } from '../../api.py'; // Asegúrate de ajustar la ruta del archivo de la API REST
 
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -85,12 +85,12 @@ function Recipe() {
     router.push('/Search')
   };
 
-  const handleAdapt = async () => {
-    if (recipeId) {
-      const response = await obtener_receta(recipeId); // Llama a la función obtener_receta con el ID de la receta
-      console.log(response); // Muestra la salida en la consola (ajusta esto según tus necesidades)
-    }
-  };
+//   const handleAdapt = async () => {
+//     if (recipeId) {
+//       const response = await obtener_receta(recipeId); // Llama a la función obtener_receta con el ID de la receta
+//       console.log(response); // Muestra la salida en la consola (ajusta esto según tus necesidades)
+//     }
+//   };
   
 
   return(
@@ -150,7 +150,7 @@ function Recipe() {
                         </h3>
                     </Grid>
                     <Grid item xs textAlign="center">
-                        <Button variant="contained" onClick={handleAdapt}>Adapt</Button>
+                        <Button variant="contained">Adapt</Button>
                     </Grid>
                 </Grid>
 
