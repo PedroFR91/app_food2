@@ -3,6 +3,8 @@ import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { createTheme, ThemeProvider } from '@material-ui/core/styles';
 import { auth, db } from '../../firebase.config';
 
+import { useRouter } from 'next/router';
+
 
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
@@ -34,7 +36,9 @@ const theme = createTheme({
 export default function SignInForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("");
   const [toggleView, setToggleView] = useState(true);
+  const { push } = useRouter();
 
 
 
@@ -52,27 +56,31 @@ export default function SignInForm() {
       const res = await createUserWithEmailAndPassword(
         auth,
         email,
-        password
+        password,
+        username
       );
 
-  const handleLogin = async (e) => {
-        e.preventDefault();
-        try {
-          const res = await signInWithEmailAndPassword(auth, email, password);
-          const user = res.user;
-          if (user.role === 'trainer') {
-            push('/trainer/home');
-          } else {
-            push('/client/program');
-          }
-        } catch (error) {
-          setError(true);
-        }
+  const handleLogin = (e) => {
+    e.preventDefault();
+
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        //Signed In
+        const user = userCredential.user;
+        setReady(true);
+        setMyUid(user.uid);
+        dataLogin(user.uid);
+        push('/home');
+      })
+      .catch((error) => {
+        setError(true);
+      });
   };
 //creando documento llamado users y añadiendo un usuario
       await setDoc(doc(db, 'users', res.user.uid), {
         email:email,
         password:password,
+        username:username,
         id: res.user.uid,
         timeStamp: serverTimestamp(),
       });
@@ -110,70 +118,81 @@ export default function SignInForm() {
         <div>
         {toggleView ? (
         <div>
-        <form >
-            <Grid item xs={12}>
-              <TextField
-                type="email"
-                label="Email"
-                variant="outlined"
-                fullWidth
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                focused
-              />
-            </Grid>
-            <Box sx={{ height: '10px' }} />
-            <Grid item xs={12}>
-              <TextField
-                type="password"
-                label="Password"
-                variant="outlined"
-                fullWidth
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <Box sx={{ height: '20px' }} />
-              <Button type="submit" variant="contained" color="primary" fullWidth>
-                Create Account
-              </Button>
-              <Box sx={{ height: '20px' }} />
-            </Grid>
-        </form>
+          <form onSubmit={handleAdd} >
+              <Grid item xs={12}>
+                <TextField
+                  type="email"
+                  label="Email"
+                  variant="outlined"
+                  fullWidth
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  focused
+                />
+              </Grid>
+              <Box sx={{ height: '10px' }} />
+              <Grid item xs={12}>
+                <TextField
+                  type="password"
+                  label="Password"
+                  variant="outlined"
+                  fullWidth
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </Grid>
+              <Box sx={{ height: '10px' }} />
+              <Grid item xs={12}>
+                <TextField
+                  type="username"
+                  label="Username"
+                  variant="outlined"
+                  fullWidth
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Box sx={{ height: '20px' }} />
+                  <Button type="submit" variant="contained" color="primary" fullWidth>
+                    Create Account
+                  </Button>
+                <Box sx={{ height: '20px' }} />
+              </Grid>
+          </form>
         </div>
       ) : (
         <div>
-          <form onSubmit={handleLogin}>
-          <Grid item xs={12}>
-              <TextField
-                type="email"
-                label="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                focused
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                type="password"
-                label="Password"
-                variant="outlined"
-                fullWidth
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </Grid>
-            <button type='submit'>Acceder</button>
-            <div>
-              <Image
-                src={'/images/icon_def.png'}
-                alt={'logo of the app'}
-                width={35}
-                height={20}
-              />
-              <p>Accede con Google</p>
-            </div>
+          <form onSubmit={handleLogin} >
+              <Grid item xs={12}>
+                <TextField
+                  type="email"
+                  label="Email"
+                  variant="outlined"
+                  fullWidth
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  focused
+                />
+              </Grid>
+              <Box sx={{ height: '10px' }} />
+              <Grid item xs={12}>
+                <TextField
+                  type="password"
+                  label="Password"
+                  variant="outlined"
+                  fullWidth
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Box sx={{ height: '20px' }} />
+                  <Button type="submit" variant="contained" color="primary" fullWidth>
+                    Log in
+                  </Button>
+                <Box sx={{ height: '20px' }} />
+              </Grid>
           </form>
         </div>
       )}
@@ -182,7 +201,7 @@ export default function SignInForm() {
             
           {toggleView
             ? 'Are you registered?, Log in'
-            : '¿No tienes cuenta?, creala'}
+            : 'Do not have an account?, Register'}
         </div>
       </div>
     </div>
