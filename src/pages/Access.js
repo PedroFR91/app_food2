@@ -59,23 +59,6 @@ export default function SignInForm() {
         password,
         username
       );
-
-  const handleLogin = (e) => {
-    e.preventDefault();
-
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        //Signed In
-        const user = userCredential.user;
-        setReady(true);
-        setMyUid(user.uid);
-        dataLogin(user.uid);
-        push('/home');
-      })
-      .catch((error) => {
-        setError(true);
-      });
-  };
 //creando documento llamado users y añadiendo un usuario
       await setDoc(doc(db, 'users', res.user.uid), {
         email:email,
@@ -84,10 +67,28 @@ export default function SignInForm() {
         id: res.user.uid,
         timeStamp: serverTimestamp(),
       });
+      push('/home');
     
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        //Signed In
+        const user = userCredential.user;
+        // setReady(true);
+        // setMyUid(user.uid);
+        // dataLogin(user.uid);
+        push('/home');
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (
