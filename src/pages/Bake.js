@@ -80,7 +80,7 @@ export default function SearchPage() {
     const [searchIngredientsValue, setSearchIngredientsValue] = useState('Flour');
 
     useEffect(() => {
-      const q = query(collection(db, 'Recipes'), limit(20));
+      const q = query(collection(db, 'Recipes'));
     
       const unsub = onSnapshot(
         q,
@@ -129,7 +129,9 @@ export default function SearchPage() {
     }, [searchValue]);
 
     
-
+    const handleGotoSearch = () => {
+      router.push('/Search')
+    };
     const handleGotoRecipes = () => {
       router.push('/menu')
     };
@@ -149,7 +151,7 @@ export default function SearchPage() {
             <AppBar position="static" >
                 <Toolbar>
                 <Typography variant="h6" component="h2" sx={{ flexGrow: 1 }}>
-                    Search for recipes
+                    Baking Recipes
                 </Typography>
                 </Toolbar>
             </AppBar> 
@@ -188,15 +190,15 @@ export default function SearchPage() {
                     <Box sx={{ flexGrow: 1 }} />
                     <Button  color="inherit" style={{ textTransform: 'none', justifyContent: 'center' }}> 
                         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                            <LocalDiningIcon onClick={handleGotoRecipes} /> 
-                            <div>Recipes</div>
+                            <LocalDiningIcon color="primary" onClick={handleGotoRecipes} /> 
+                            <div style={{ color: '#1976d2' }}>Recipes</div>
                         </div>
                     </Button>
                     <Box sx={{ flexGrow: 4 }} />
                     <Button  color="inherit" style={{ textTransform: 'none', justifyContent: 'center' }}>
                         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                            <SearchIcon color="primary"/> 
-                            <div style={{ color: '#1976d2' }}>Search</div>
+                            <SearchIcon onClick={handleGotoSearch}/> 
+                            <div >Search</div>
                         </div>
                     </Button>
                     <Box sx={{ flexGrow: 3 }} />

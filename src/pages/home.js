@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { useRouter } from 'next/router';
+import { auth } from '../../firebase.config';
 
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -9,6 +10,7 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
+import Avatar from '@material-ui/core/Avatar';
 
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -52,6 +54,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function home() {
   const classes = useStyles();
+  const [user, setUser] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [completed, setCompleted] = useState(false);
@@ -59,6 +62,21 @@ export default function home() {
   const [activeStep, setActiveStep] = React.useState(0);
 
   const open = Boolean(anchorEl);
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        // El usuario ha iniciado sesión
+        setUser(user);
+      } else {
+        // El usuario ha cerrado sesión
+        setUser(null);
+      }
+    });
+  
+    return () => unsubscribe();
+  }, []);
+  
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -162,7 +180,18 @@ export default function home() {
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                 AppFoodCom
             </Typography>
-            <Button color="inherit">Login</Button>
+            {user ? (
+              <div>
+                <Avatar src={user.photoURL} alt="Avatar" />
+                <Typography variant="subtitle1">{user.username}</Typography>
+              </div>
+            ) : (
+              <div>
+                {/* Resto del formulario de inicio de sesión */}
+                <Button color="inherit">Login</Button>
+              </div>
+            )}
+
             </Toolbar>
         </AppBar>
       </Box>    
@@ -241,9 +270,6 @@ export default function home() {
                     <Box sx={{ flexGrow: 1 }} />
                 </Toolbar>
             </AppBar>
-
-     
-
     </div>
   );
 }

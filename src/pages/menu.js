@@ -18,26 +18,22 @@ import AppSettingsAltIcon from '@mui/icons-material/AppSettingsAlt';
 
 const images = [
   {
-    url: '/images/menu/prawns-959219_1920.jpg',
-    title: 'Seafood Recipes',
-    width: '40%',
-    route: '/Bake',
-  },
-  {
     url: '/images/menu/breakfast-1804457_1920.jpg',
-    title: 'Breakfast Recipes',
+    title: 'Baking Recipes',
     width: '30%',
     route: '/Bake',
-  },
-  {
-    url: '/images/menu/food-3270461_1920.jpg',
-    title: 'Vegetables Recipes',
-    width: '30%',
   },
   {
     url: '/images/menu/salad-2756467_1920.jpg',
-    title: 'Healthy Recipes',
+    title: 'Vegetables Recipes',
     width: '30%',
+    route: '/SaladMeals',
+  },
+  {
+    url: '/images/menu/food-3270461_1920.jpg',
+    title: 'Meat Recipes',
+    width: '30%',
+    route: '/MeatMeals',
   },
   {
     url: '/images/menu/salmon-2303843_1920.jpg',

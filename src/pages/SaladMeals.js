@@ -77,10 +77,7 @@ export default function SearchPage() {
     const [MyRecipes, setMyRecipes] = useState([])
     const router = useRouter();
     const [searchValue, setSearchValue] = useState('');
-    const [searchIngredientsValue, setSearchIngredientsValue] = useState('');
-    const [searchType, setSearchType] = useState('title');
-
-
+    const [searchIngredientsValue, setSearchIngredientsValue] = useState('salad');
 
     useEffect(() => {
       const q = query(collection(db, 'Recipes'));
@@ -111,7 +108,6 @@ export default function SearchPage() {
           unsubscribe = onSnapshot(
               query(
                   collection(db, 'Recipes'),
-                  where('title', '>=', searchValue.toLowerCase()),
                   where('ingredients', 'array-contains', searchIngredientsValue.toLowerCase())
               ),
               (snapshot) => {
@@ -133,7 +129,9 @@ export default function SearchPage() {
     }, [searchValue]);
 
     
-
+    const handleGotoSearch = () => {
+        router.push('/Search')
+      };
     const handleGotoRecipes = () => {
       router.push('/menu')
     };
@@ -153,89 +151,36 @@ export default function SearchPage() {
             <AppBar position="static" >
                 <Toolbar>
                 <Typography variant="h6" component="h2" sx={{ flexGrow: 1 }}>
-                    Search for recipes
+                    Vegetable Recipes
                 </Typography>
                 </Toolbar>
-            </AppBar>
-
-            {/* Search Bar */}
-            <AppBar position="static" style={{ backgroundColor: 'white' }}>
-                <Toolbar>
-                <Search style={{ backgroundColor: '#64b5f6' }}>
-                  <SearchIconWrapper>
-                  <SearchIcon />
-                  </SearchIconWrapper>
-                  <StyledInputBase
-                    placeholder={
-                      searchType === 'title'
-                        ? 'Search the recipes list'
-                        : 'Search ingredients'
-                    }
-                    inputProps={{ 'aria-label': 'search' }}
-                    value={
-                      searchType === 'title'
-                        ? searchValue
-                        : searchIngredientsValue
-                    }
-                    onChange={(e) =>
-                      searchType === 'title'
-                        ? setSearchValue(e.target.value)
-                        : setSearchIngredientsValue(e.target.value)
-                    }
-                  />
-                </Search>
-                <Box marginLeft="auto">
-                  <IconButton
-                    onClick={() =>
-                      setSearchType(
-                        searchType === 'title' ? 'ingredients' : 'title'
-                      )
-                    }
-                  >
-                    {searchType === 'title' ? (
-                      <MenuBookIcon />
-                    ) : (
-                      <RamenDiningIcon />
-                    )}
-                  </IconButton>
-                  </Box>
-                </Toolbar>
-            </AppBar>
-            
+            </AppBar> 
           </Box>
 
-        <Box sx={{ paddingBottom: '50px' }}>             
-          {MyRecipes.filter((recipe) => {
-            if (searchType === 'title') {
-              return (
-                recipe.title.toLowerCase().includes(searchValue.toLowerCase()) &&
-                recipe.ingredients.some((ingredient) =>
-                  ingredient.text.toLowerCase().includes(searchValue.toLowerCase())
-                )
-              );
-            } else {
-              return recipe.ingredients.some((ingredient) =>
-                ingredient.text.toLowerCase().includes(searchIngredientsValue.toLowerCase())
-              );
-            }
-          }).map((recipe, id) => (
-          <>
-                <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-                  <ListItem onClick={() => handleClickRecipe(recipe)}>
-                      <ListItemAvatar>
-                      <Avatar>
-                          <img src={recipe.url_image}
-                          style={{ width: '100px', height: '50px' }}
-                          onError={(e) => {
-                            e.target.src = '/images/icon_def.png';
-                          }}/>
-                      </Avatar>
-                      </ListItemAvatar>
-                      <ListItemText primary={recipe.title} />
-                  </ListItem>
-              </List>   
-          </>
-          ))}
+        <Box sx={{ paddingBottom: '50px' }}>
+        {MyRecipes.filter((recipe) => {
+            return recipe.ingredients.some((ingredient) =>
+              ingredient.text.toLowerCase().includes(searchIngredientsValue.toLowerCase())
+            );
+          
+        }).map((recipe, id) => (
+        <>
+              <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+                <ListItem onClick={() => handleClickRecipe(recipe)}>
+                    <ListItemAvatar>
+                    <Avatar>
+                        <img src={recipe.url_image}
+                        style={{ width: '100px', height: '50px' }}
+                        onError={(e) => {
+                          e.target.src = '/images/icon_def.png';
+                        }}/>
+                    </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText primary={recipe.title} />
+                </ListItem>
+            </List>   
+        </>
+        ))}
         </Box>
 
 
@@ -245,15 +190,15 @@ export default function SearchPage() {
                     <Box sx={{ flexGrow: 1 }} />
                     <Button  color="inherit" style={{ textTransform: 'none', justifyContent: 'center' }}> 
                         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                            <LocalDiningIcon onClick={handleGotoRecipes} /> 
-                            <div>Recipes</div>
+                            <LocalDiningIcon color="primary" onClick={handleGotoRecipes} /> 
+                            <div style={{ color: '#1976d2' }}>Recipes</div>
                         </div>
                     </Button>
                     <Box sx={{ flexGrow: 4 }} />
                     <Button  color="inherit" style={{ textTransform: 'none', justifyContent: 'center' }}>
                         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                            <SearchIcon color="primary"/> 
-                            <div style={{ color: '#1976d2' }}>Search</div>
+                            <SearchIcon onClick={handleGotoSearch}/> 
+                            <div >Search</div>
                         </div>
                     </Button>
                     <Box sx={{ flexGrow: 3 }} />
