@@ -24,6 +24,21 @@ import EggAltIcon from '@mui/icons-material/EggAlt';
 import ConstructionIcon from '@mui/icons-material/Construction';
 import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
 
+import * as React from 'react';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import DialogTitle from '@mui/material/DialogTitle';
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogActions from '@mui/material/DialogActions';
+import PropTypes from 'prop-types';
+
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+
 // import { obtener_receta } from '../../api.py'; // Asegúrate de ajustar la ruta del archivo de la API REST
 
 
@@ -36,11 +51,88 @@ const Item = styled(Paper)(({ theme }) => ({
 
 const lightTheme = createTheme({ palette: { mode: 'light' } });
 
+const OptionsAdapt = ['Vegetarian', 'Vegan'];
+
+function SimpleDialog(props) {
+  const { onClose, selectedValue, open } = props;
+
+  const handleClose = () => {
+    onClose(selectedValue);
+  };
+
+  return (
+    <Dialog onClose={handleClose} open={open}>
+      <DialogTitle>Adapt this recipe!</DialogTitle>
+      <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Select the food restriction you
+            want to apply to recipe ingredients!
+          </DialogContentText>
+        </DialogContent>
+        <List sx={{ pt: 0 }}>
+            <FormControl component="fieldset">
+            <RadioGroup
+                row
+                aria-labelledby="adapt-options-group-label"
+                name="adapt-options-group"
+            >
+                {OptionsAdapt.map((OptionAdapt) => (
+                <ListItem disableGutters key={OptionAdapt}>
+                    <FormControlLabel
+                    value={OptionAdapt}
+                    control={<Radio color="success" />}
+                    label={OptionAdapt}
+                    style={{ margin: 0 }} // Añade el estilo para alinear con el texto del DialogTitle y DialogContentText
+                    />
+                </ListItem>
+                ))}
+            </RadioGroup>
+            </FormControl>
+        </List>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleClose} autoFocus>
+            OK
+          </Button>
+        </DialogActions>
+    </Dialog>
+  );
+}
+
+SimpleDialog.propTypes = {
+  onClose: PropTypes.func.isRequired,
+  open: PropTypes.bool.isRequired,
+  selectedValue: PropTypes.string.isRequired,
+};
+
+
+  
+function handleGotoRecipes() {
+    router.push('/menu');
+}
+  
+function handleGotoSearch() {
+    router.push('/Search');
+}
+
 function Recipe() {
   const router = useRouter();
   const { recipeId } = router.query;
   const [recipe, setRecipe] = useState(null);
   const [previousPage, setPreviousPage] = useState(null);
+  const [open, setOpen] = React.useState(false);
+  const [selectedValue, setSelectedValue] = React.useState(OptionsAdapt[1]);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (value) => {
+    setOpen(false);
+    if (value) {
+        setSelectedValue(value);
+      }
+  };
 
   useEffect(() => {
     const fetchRecipe = async () => {
@@ -78,12 +170,6 @@ function Recipe() {
     }
   };
 
-  const handleGotoRecipes = () => {
-    router.push('/menu')
-  };
-  const handleGotoSearch = () => {
-    router.push('/Search')
-  };
 
 //   const handleAdapt = async () => {
 //     if (recipeId) {
@@ -150,7 +236,19 @@ function Recipe() {
                         </h3>
                     </Grid>
                     <Grid item xs textAlign="center">
-                        <Button variant="contained">Adapt</Button>
+                        
+                        <Typography variant="subtitle1" component="div">
+                            Selected: {selectedValue}
+                        </Typography>
+                        <br />
+                        <Button variant="outlined" onClick={handleClickOpen}>
+                        Adapt
+                        </Button>
+                        <SimpleDialog
+                            selectedValue={selectedValue}
+                            open={open}
+                            onClose={(value) => handleClose(value)}
+                        />
                     </Grid>
                 </Grid>
 

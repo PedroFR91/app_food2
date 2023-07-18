@@ -15,17 +15,13 @@ import Avatar from '@material-ui/core/Avatar';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 
-
-import Stepper from '@mui/material/Stepper';
-import Step from '@mui/material/Step';
-import StepLabel from '@mui/material/StepLabel';
-import StepContent from '@mui/material/StepContent';
-import Paper from '@mui/material/Paper';
-
 //Icons
 import LocalDiningIcon from '@mui/icons-material/LocalDining';
 import SearchIcon from '@mui/icons-material/Search';
 import AppSettingsAltIcon from '@mui/icons-material/AppSettingsAlt';
+
+
+import fetchData from './api';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -81,31 +77,12 @@ export default function home() {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
 
-  const handleReset = () => {
-    setActiveStep(0);
-  };
-
-  const handleButtonClick = (route) => {
-    router.push(route);
-  };
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
-
-  const handleMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
   const handleMenuClose = () => {
     setAnchorEl(null);
-  };
-
-  const handleNextSlide = () => {
-    setCurrentSlide(currentSlide + 1);
   };
 
   const handleComplete = () => {
@@ -120,29 +97,9 @@ export default function home() {
     router.push('/Search')
   };
 
-  const slides = [
-    {
-      title: 'Welcome!',
-      description: 'In this app, you can find lots of recipes and customize to your preferences. You will be able to modify your recipes to take into account allergies, intolerances, specific diseases like diabetes or even diets such as vegetarian or vegan.',
-      buttonText: 'Next',
-      onClick: handleNext,
-      image: '/images/slides/logo_def.png',
-    },
-    {
-      title: 'How to?',
-      description: 'When you fancy cooking, explore the recipe gallery. Pick one and adapt the ingredients to your needs by applying food restrictions.',
-      buttonText: 'Next',
-      onClick: handleNext,
-      image: 'images/slides/food_app1.png',
-    },
-    {
-      title: 'Smart recipe adaptation',
-      description: 'The app uses food intelligence to calculate the most suitable alternative for your diet',
-      buttonText: 'Complete',
-      onClick: handleComplete,
-      image: 'images/slides/food_app2.png',
-    },
-  ];
+  const handleButtoClick = () => {
+    fetchData();
+  };
 
   return (
     <div>
@@ -194,54 +151,11 @@ export default function home() {
             </Toolbar>
         </AppBar>
       </Box>    
-      {/* Tutorial Steps */}
-      <Box sx={{ maxWidth: 400, marginBottom: '50px' }}>
-        <Stepper activeStep={activeStep} orientation="vertical">
-          {slides.map((slide, index) => (
-            <Step key={slide.title}>
-              <StepLabel
-                optional={
-                  index === 2 ? (
-                    <Typography variant="caption">Last step</Typography>
-                  ) : null
-                }
-              >
-                {slide.title}
-              </StepLabel>
-              <StepContent>
-                <Typography>{slide.description}</Typography>
-                <Box sx={{ mb: 2 }}>
-                <img src={slide.image} alt={slide.title} style={{ maxWidth: '100%', height: 'auto' }} />
-                  <div>
-                    <Button
-                      variant="contained"
-                      onClick={handleNext}
-                      sx={{ mt: 1, mr: 1 }}
-                    >
-                      {index === slides.length - 1 ? 'Finish' : 'Continue'}
-                    </Button>
-                    <Button
-                      disabled={index === 0}
-                      onClick={handleBack}
-                      sx={{ mt: 1, mr: 1 }}
-                    >
-                      Back
-                    </Button>
-                  </div>
-                </Box>
-              </StepContent>
-            </Step>
-              ))}
-          </Stepper>
-          {activeStep === slides.length && (
-              <Paper square elevation={0} sx={{ p: 3 }}>
-              <Typography>All steps completed - you&apos;re finished</Typography>
-              <Button onClick={handleComplete} sx={{ mt: 1, mr: 1 }}>
-                  Menu
-              </Button>
-              </Paper>
-          )}
-      </Box>
+      
+      <div>
+        <button onClick={handleButtoClick}>Realizar Solicitud</button>
+        <div id="response"></div>
+      </div>
         {/* Bottom Bar */}
         <AppBar position="fixed" color="default" style={{ backgroundColor: 'white', marginTop: '50px' }} sx={{ top: 'auto', bottom: 0 }}>
                 <Toolbar sx={{ flexGrow: 1 }}>
