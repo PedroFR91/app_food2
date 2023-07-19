@@ -60,6 +60,10 @@ function SimpleDialog(props) {
     onClose(selectedValue);
   };
 
+  const handleChange = (event) => {
+    onClose(event.target.value); // Pass the selected value back to the parent component
+  };
+
   return (
     <Dialog onClose={handleClose} open={open}>
       <DialogTitle>Adapt this recipe!</DialogTitle>
@@ -75,6 +79,8 @@ function SimpleDialog(props) {
                 row
                 aria-labelledby="adapt-options-group-label"
                 name="adapt-options-group"
+                value={selectedValue}
+                onChange={handleChange} // Handle onChange event of radio buttons
             >
                 {OptionsAdapt.map((OptionAdapt) => (
                 <ListItem disableGutters key={OptionAdapt}>
@@ -125,6 +131,7 @@ function Recipe() {
 
   const handleClickOpen = () => {
     setOpen(true);
+    setSelectedValue(selectedValue); // Set the initial selected value in the dialog
   };
 
   const handleClose = (value) => {
