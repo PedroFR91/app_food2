@@ -51,67 +51,6 @@ const Item = styled(Paper)(({ theme }) => ({
 
 const lightTheme = createTheme({ palette: { mode: 'light' } });
 
-const OptionsAdapt = ['Vegetarian', 'Vegan'];
-
-function SimpleDialog(props) {
-  const { onClose, selectedValue, open } = props;
-
-  const handleClose = () => {
-    onClose(selectedValue);
-  };
-
-  const handleChange = (event) => {
-    onClose(event.target.value); // Pass the selected value back to the parent component
-  };
-
-  return (
-    <Dialog open={open}>
-      <DialogTitle>Adapt this recipe!</DialogTitle>
-      <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Select the food restriction you
-            want to apply to recipe ingredients!
-          </DialogContentText>
-        </DialogContent>
-        <List sx={{ pt: 0 }}>
-            <FormControl component="fieldset">
-            <RadioGroup
-                row
-                aria-labelledby="adapt-options-group-label"
-                name="adapt-options-group"
-                value={selectedValue}
-                onChange={handleChange} // Handle onChange event of radio buttons
-            >
-                {OptionsAdapt.map((OptionAdapt) => (
-                <ListItem disableGutters key={OptionAdapt}>
-                    <FormControlLabel
-                    value={OptionAdapt}
-                    control={<Radio color="success" />}
-                    label={OptionAdapt}
-                    style={{ margin: 0 }} // Añade el estilo para alinear con el texto del DialogTitle y DialogContentText
-                    />
-                </ListItem>
-                ))}
-            </RadioGroup>
-            </FormControl>
-        </List>
-        <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleClose} autoFocus>
-            OK
-          </Button>
-        </DialogActions>
-    </Dialog>
-  );
-}
-
-SimpleDialog.propTypes = {
-  onClose: PropTypes.func.isRequired,
-  open: PropTypes.bool.isRequired,
-  selectedValue: PropTypes.string.isRequired,
-};
-
-
   
 function handleGotoRecipes() {
     router.push('/menu');
@@ -126,8 +65,8 @@ function Recipe() {
   const { recipeId } = router.query;
   const [recipe, setRecipe] = useState(null);
   const [previousPage, setPreviousPage] = useState(null);
-  const [open, setOpen] = React.useState(false);
-  const [selectedValue, setSelectedValue] = React.useState(OptionsAdapt[1]);
+  const [open, setOpen] = useState(false);
+  const [selectedValue, setSelectedValue] = React.useState('Vegan');
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -140,7 +79,11 @@ function Recipe() {
         setSelectedValue(value);
       }
   };
-
+  
+    const handleChange = (event) => {
+        setSelectedValue(event.target.value); // Pass the selected value back to the parent component
+    };
+  
   useEffect(() => {
     const fetchRecipe = async () => {
       if (recipeId) {
@@ -251,11 +194,49 @@ function Recipe() {
                         <Button variant="outlined" onClick={handleClickOpen}>
                         Adapt
                         </Button>
-                        <SimpleDialog
-                            selectedValue={selectedValue}
-                            open={open}
-                            onClose={(value) => handleClose(value)}
-                        />
+                        <Dialog open={open}>
+                            <DialogTitle>Adapt this recipe!</DialogTitle>
+                            <DialogContent>
+                                <DialogContentText id="alert-dialog-description">
+                                    Select the food restriction you
+                                    want to apply to recipe ingredients!
+                                </DialogContentText>
+                                </DialogContent>
+                                <List sx={{ pt: 0 }}>
+                                    <FormControl component="fieldset">
+                                    <RadioGroup
+                                        row
+                                        aria-labelledby="adapt-options-group-label"
+                                        name="adapt-options-group"
+                                        value={selectedValue}
+                                        onChange={handleChange} // Handle onChange event of radio buttons
+                                    >
+                                        
+                                        <ListItem disableGutters >
+                                            <FormControlLabel
+                                            value={'Vegetarian'}
+                                            control={<Radio color="success" />}
+                                            label={'Vegetarian'}
+                                            style={{ margin: 0 }} // Añade el estilo para alinear con el texto del DialogTitle y DialogContentText
+                                            />
+                                            <FormControlLabel
+                                            value={'Vegan'}
+                                            control={<Radio color="success" />}
+                                            label={'Vegan'}
+                                            style={{ margin: 0 }} // Añade el estilo para alinear con el texto del DialogTitle y DialogContentText
+                                            />
+                                        </ListItem>
+                                        
+                                    </RadioGroup>
+                                    </FormControl>
+                                </List>
+                                <DialogActions>
+                                <Button onClick={handleClose}>Cancel</Button>
+                                <Button onClick={handleClose} autoFocus>
+                                    OK
+                                </Button>
+                                </DialogActions>
+                            </Dialog>
                     </Grid>
                 </Grid>
 
@@ -347,38 +328,44 @@ function Recipe() {
 
           {/* Bottom Bar */}
             <AppBar position="fixed" color="default" style={{ backgroundColor: 'white', marginTop: '50px' }} sx={{ top: 'auto', bottom: 0 }}>
-                <Toolbar sx={{ flexGrow: 1 }}>
-                    <Box sx={{ flexGrow: 1 }} />
-                    <Button  color="inherit" style={{ textTransform: 'none', justifyContent: 'center' }}> 
-                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                            <LocalDiningIcon  onClick={handleGotoRecipes}/> 
-                            <div>Recipes</div>
-                        </div>
-                    </Button>
-                    <Box sx={{ flexGrow: 4 }} />
-                    <Button  color="inherit" style={{ textTransform: 'none', justifyContent: 'center' }}>
-                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                            <SearchIcon 
-                                color={previousPage === '/Search' ? 'inherit' : 'primary'} 
-                                onClick={handleGotoSearch}/> 
-                            <div style={{ color: previousPage === '/Search' ? 'inherit' : '#1976d2' }}>Search</div>
-                        </div>
-                    </Button>
-                    <Box sx={{ flexGrow: 3 }} />
-                    <Button  color="inherit" style={{ textTransform: 'none', justifyContent: 'center' }}>
-                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                            <AppSettingsAltIcon/>
-                            <div>Adapted Recipes</div>
-                        </div>
-                    </Button>
-                    <Box sx={{ flexGrow: 1 }} />
-                </Toolbar>
+            <Toolbar sx={{ flexGrow: 1 }}>
+                <Box sx={{ flexGrow: 1 }} />
+                <Button color="inherit" style={{ textTransform: 'none', justifyContent: 'center' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    <div onClick={handleGotoRecipes}>
+                    <LocalDiningIcon />
+                    </div>
+                    <div>Recipes</div>
+                </div>
+                </Button>
+                <Box sx={{ flexGrow: 4 }} />
+                <Button color="inherit" style={{ textTransform: 'none', justifyContent: 'center' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    <div onClick={handleGotoSearch}>
+                    <SearchIcon color={previousPage === '/Search' ? 'inherit' : 'primary'} />
+                    </div>
+                    <div style={{ color: previousPage === '/Search' ? 'inherit' : '#1976d2' }}>Search</div>
+                </div>
+                </Button>
+                <Box sx={{ flexGrow: 3 }} />
+                <Button color="inherit" style={{ textTransform: 'none', justifyContent: 'center' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    <div>
+                    <AppSettingsAltIcon />
+                    </div>
+                    <div>Adapted Recipes</div>
+                </div>
+                </Button>
+                <Box sx={{ flexGrow: 1 }} />
+            </Toolbar>
             </AppBar>
+
 
           
           
         </div>
       )}
+      
     </>
   );
 }
