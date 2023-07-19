@@ -75,10 +75,13 @@ function Recipe() {
 
   const handleClose = (value) => {
     setOpen(false);
-    if (value) {
-        setSelectedValue(value);
-      }
-  };
+   };
+
+   const handleAPI = (e,b) => {
+    e.preventDefault();
+    console.log(b);
+    setOpen(false);
+   };
   
     const handleChange = (event) => {
         setSelectedValue(event.target.value); // Pass the selected value back to the parent component
@@ -232,7 +235,7 @@ function Recipe() {
                                 </List>
                                 <DialogActions>
                                 <Button onClick={handleClose}>Cancel</Button>
-                                <Button onClick={handleClose} autoFocus>
+                                <Button onClick={e=>handleAPI(e,selectedValue)} autoFocus>
                                     OK
                                 </Button>
                                 </DialogActions>
@@ -322,46 +325,39 @@ function Recipe() {
                 </Grid>
             </Box>
 
-
-
-
-
           {/* Bottom Bar */}
             <AppBar position="fixed" color="default" style={{ backgroundColor: 'white', marginTop: '50px' }} sx={{ top: 'auto', bottom: 0 }}>
-            <Toolbar sx={{ flexGrow: 1 }}>
-                <Box sx={{ flexGrow: 1 }} />
-                <Button color="inherit" style={{ textTransform: 'none', justifyContent: 'center' }}>
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                    <div onClick={handleGotoRecipes}>
-                    <LocalDiningIcon />
+                <Toolbar sx={{ flexGrow: 1 }}>
+                    <Box sx={{ flexGrow: 1 }} />
+                    <Button color="inherit" style={{ textTransform: 'none', justifyContent: 'center' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                        <div onClick={handleGotoRecipes}>
+                        <LocalDiningIcon />
+                        </div>
+                        <div>Recipes</div>
                     </div>
-                    <div>Recipes</div>
-                </div>
-                </Button>
-                <Box sx={{ flexGrow: 4 }} />
-                <Button color="inherit" style={{ textTransform: 'none', justifyContent: 'center' }}>
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                    <div onClick={handleGotoSearch}>
-                    <SearchIcon color={previousPage === '/Search' ? 'inherit' : 'primary'} />
+                    </Button>
+                    <Box sx={{ flexGrow: 4 }} />
+                    <Button color="inherit" style={{ textTransform: 'none', justifyContent: 'center' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                        <div onClick={handleGotoSearch}>
+                        <SearchIcon color={previousPage === '/Search' ? 'inherit' : 'primary'} />
+                        </div>
+                        <div style={{ color: previousPage === '/Search' ? 'inherit' : '#1976d2' }}>Search</div>
                     </div>
-                    <div style={{ color: previousPage === '/Search' ? 'inherit' : '#1976d2' }}>Search</div>
-                </div>
-                </Button>
-                <Box sx={{ flexGrow: 3 }} />
-                <Button color="inherit" style={{ textTransform: 'none', justifyContent: 'center' }}>
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                    <div>
-                    <AppSettingsAltIcon />
+                    </Button>
+                    <Box sx={{ flexGrow: 3 }} />
+                    <Button color="inherit" style={{ textTransform: 'none', justifyContent: 'center' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                        <div>
+                        <AppSettingsAltIcon />
+                        </div>
+                        <div>Adapted Recipes</div>
                     </div>
-                    <div>Adapted Recipes</div>
-                </div>
-                </Button>
-                <Box sx={{ flexGrow: 1 }} />
-            </Toolbar>
-            </AppBar>
-
-
-          
+                    </Button>
+                    <Box sx={{ flexGrow: 1 }} />
+                </Toolbar>
+            </AppBar> 
           
         </div>
       )}
