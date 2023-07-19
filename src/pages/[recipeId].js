@@ -65,7 +65,7 @@ function SimpleDialog(props) {
   };
 
   return (
-    <Dialog onClose={handleClose} open={open}>
+    <Dialog open={open}>
       <DialogTitle>Adapt this recipe!</DialogTitle>
       <DialogContent>
           <DialogContentText id="alert-dialog-description">

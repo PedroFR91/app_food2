@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+import pandas as pd
 
 app = FastAPI()
 
@@ -112,6 +113,19 @@ objeto = {
 @app.get("/ruta")
 async def get_objeto():
      return objeto["ingredients"]
+
+
+@app.get("/excel")
+async def get_objeto():
+     # Cargar el archivo .xlsx en un DataFrame
+    df = pd.read_excel('./english_db_labeled.xlsx')
+
+    # Obtener los valores de la columna deseada
+    sentences = df['Main food description'].tolist()
+    
+    return sentences[1]
+
+
 
 
 
